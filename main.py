@@ -4,6 +4,7 @@ from screens.login import tela_login
 from screens.cadastro import tela_cadastro
 from screens.admin import tela_admin
 from screens.aluno import tela_aluno
+from whatsapp_service import iniciar_whatsapp_service
 
 
 def main(page: ft.Page):
@@ -204,6 +205,12 @@ def main(page: ft.Page):
     # =========================
 
     mostrar_login()
+
+    # =========================
+    # INICIAR WHATSAPP
+    # =========================
+
+    iniciar_whatsapp_service()
 
 
 # =========================

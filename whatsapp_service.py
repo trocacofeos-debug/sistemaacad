@@ -13,7 +13,8 @@ from database import (
 # =========================
 
 ACCOUNT_SID = "AC4a82b76828a604e6d3a18963e591c3ea"
-AUTH_TOKEN = "1a97f38695f4157baeb5df967cc8ac84"
+AUTH_TOKEN = "798d12bdb981e5b256f333420ec25d24"
+
 FROM_NUMBER = "whatsapp:+14155238886"
 
 
@@ -22,20 +23,31 @@ FROM_NUMBER = "whatsapp:+14155238886"
 # =========================
 
 def enviar_whatsapp(numero, mensagem):
+
     try:
-        client = Client(ACCOUNT_SID, AUTH_TOKEN)
+
+        client = Client(
+            ACCOUNT_SID,
+            AUTH_TOKEN
+        )
 
         message = client.messages.create(
+
             body=mensagem,
+
             from_=FROM_NUMBER,
-            to=f"whatsapp:+55{numero}"
+
+            to=f"whatsapp:{numero}"
         )
 
         print("WhatsApp enviado:", message.sid)
+
         return True
 
     except Exception as e:
+
         print("ERRO WHATSAPP:", e)
+
         return False
 
 
@@ -44,10 +56,13 @@ def enviar_whatsapp(numero, mensagem):
 # =========================
 
 def verificar_lembretes():
+
     try:
+
         reservas = listar_reservas_pendentes_whatsapp()
 
         for reserva in reservas:
+
             usuario = buscar_usuario_por_uid(
                 reserva["aluno_uid"]
             )
@@ -61,9 +76,10 @@ def verificar_lembretes():
                 continue
 
             mensagem = (
-                f"Olá {reserva['aluno_nome']} 👋\n"
-                f"Lembrando que seu horário é às "
-                f"{reserva['hora']} em {reserva['data']}.\n"
+                f"Olá {reserva['aluno_nome']} 👋\n\n"
+                f"Lembrete do seu horário:\n"
+                f"📅 {reserva['data']}\n"
+                f"⏰ {reserva['hora']}\n\n"
                 f"Te esperamos 😊"
             )
 
@@ -73,11 +89,13 @@ def verificar_lembretes():
             )
 
             if enviado:
+
                 marcar_whatsapp_enviado(
                     reserva["id"]
                 )
 
     except Exception as e:
+
         print("ERRO LEMBRETES:", e)
 
 
@@ -86,10 +104,14 @@ def verificar_lembretes():
 # =========================
 
 def iniciar_whatsapp_service():
+
     def loop():
+
         while True:
+
             verificar_lembretes()
-            time.sleep(60)  # verifica a cada 1 minuto
+
+            time.sleep(60)
 
     thread = threading.Thread(
         target=loop,
