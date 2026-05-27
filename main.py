@@ -1,3 +1,4 @@
+import os
 import flet as ft
 
 from screens.login import tela_login
@@ -54,6 +55,10 @@ def main(page: ft.Page):
             color="#DDDDDD"
         )
     )
+
+    # =========================
+    # LAYOUT CENTRALIZADO
+    # =========================
 
     page.add(
         ft.Container(
@@ -180,6 +185,6 @@ ft.app(
     target=main,
     view=ft.AppView.WEB_BROWSER,
     host="0.0.0.0",
-    port=8080,
+    port=int(os.environ.get("PORT", 8080)),
     assets_dir="assets"
 )
