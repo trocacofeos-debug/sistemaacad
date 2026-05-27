@@ -17,10 +17,11 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.bgcolor = "#F5F7FB"
     page.scroll = ft.ScrollMode.AUTO
+    page.padding = 0
 
-    # TAMANHO MOBILE
-    page.window_width = 500
-    page.window_height = 950
+    # =========================
+    # USUÁRIO
+    # =========================
 
     usuario = {
         "uid": None,
@@ -29,13 +30,12 @@ def main(page: ft.Page):
     }
 
     # =========================
-    # BODY PRINCIPAL
+    # BODY
     # =========================
 
     body = ft.Column(
         expand=True,
-        scroll=ft.ScrollMode.AUTO,
-        spacing=15
+        scroll=ft.ScrollMode.AUTO
     )
 
     # =========================
@@ -44,25 +44,22 @@ def main(page: ft.Page):
 
     container_central = ft.Container(
         content=body,
-        width=550,
+        width=500,
         padding=25,
         border_radius=25,
         bgcolor="white",
         shadow=ft.BoxShadow(
             blur_radius=20,
             spread_radius=1,
-            color="#DADADA"
+            color="#DDDDDD"
         )
     )
-
-    # =========================
-    # LAYOUT CENTRALIZADO
-    # =========================
 
     page.add(
         ft.Container(
             expand=True,
-            alignment=ft.alignment.center,
+            alignment=ft.Alignment(0, 0),
+            padding=20,
             content=ft.Row(
                 controls=[
                     container_central
@@ -128,7 +125,7 @@ def main(page: ft.Page):
             print("ERRO CADASTRO:", e)
 
     # =========================
-    # ATUALIZAR TELA
+    # ATUALIZAR
     # =========================
 
     def atualizar():
@@ -169,14 +166,14 @@ def main(page: ft.Page):
             print("ERRO ATUALIZAR:", e)
 
     # =========================
-    # START LOGIN
+    # START
     # =========================
 
     mostrar_login()
 
 
 # =========================
-# START APP
+# APP
 # =========================
 
 ft.app(
