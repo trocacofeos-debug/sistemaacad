@@ -84,7 +84,6 @@ def tela_login(
 
         content=ft.Column(
             spacing=25,
-
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
 
             controls=[
@@ -94,8 +93,10 @@ def tela_login(
                 # =========================
 
                 ft.Container(
-                    margin=ft.margin.only(
+                    margin=ft.Margin(
+                        left=0,
                         top=20,
+                        right=0,
                         bottom=10
                     ),
 
@@ -103,7 +104,7 @@ def tela_login(
                         src="logo.png",
                         width=170,
                         height=170,
-                        fit=ft.ImageFit.CONTAIN
+                        fit="contain"
                     )
                 ),
 
@@ -131,7 +132,7 @@ def tela_login(
                 # =========================
 
                 ft.Container(
-                    width=420,
+                    width=float("inf"),
 
                     content=ft.Column(
                         spacing=18,

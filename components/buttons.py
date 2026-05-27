@@ -9,10 +9,10 @@ def primary_button(texto, on_click):
 
     return ft.Container(
         width=float("inf"),
-        margin=ft.margin.only(top=5, bottom=5),
+        margin=ft.Margin(0, 5, 0, 5),
 
         content=ft.ElevatedButton(
-            text=texto,
+            texto,
             on_click=on_click,
             width=float("inf"),
             height=55,
@@ -41,10 +41,10 @@ def success_button(texto, on_click):
 
     return ft.Container(
         width=float("inf"),
-        margin=ft.margin.only(top=5, bottom=5),
+        margin=ft.Margin(0, 5, 0, 5),
 
         content=ft.ElevatedButton(
-            text=texto,
+            texto,
             on_click=on_click,
             width=float("inf"),
             height=55,
@@ -73,10 +73,10 @@ def danger_button(texto, on_click):
 
     return ft.Container(
         width=float("inf"),
-        margin=ft.margin.only(top=5, bottom=5),
+        margin=ft.Margin(0, 5, 0, 5),
 
         content=ft.ElevatedButton(
-            text=texto,
+            texto,
             on_click=on_click,
             width=float("inf"),
             height=55,
@@ -104,7 +104,7 @@ def danger_button(texto, on_click):
 def small_button(texto, on_click, color="#2563EB"):
 
     return ft.ElevatedButton(
-        text=texto,
+        texto,
         on_click=on_click,
         height=42,
 

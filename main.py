@@ -207,10 +207,4 @@ def main(page: ft.Page):
 # APP
 # =========================
 
-ft.app(
-    target=main,
-    view=ft.AppView.WEB_BROWSER,
-    host="0.0.0.0",
-    port=8080,
-    assets_dir="assets"
-)
+ft.app(target=main,)

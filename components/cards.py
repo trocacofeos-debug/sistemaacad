@@ -10,7 +10,7 @@ def card_horario_admin(horario, on_delete):
 
     return ft.Container(
         width=float("inf"),
-        margin=ft.margin.only(bottom=18),
+        margin=ft.margin(bottom=18),
         padding=20,
         border_radius=24,
         bgcolor="white",
@@ -114,7 +114,7 @@ def card_horario_aluno(horario, on_reservar):
 
     return ft.Container(
         width=float("inf"),
-        margin=ft.margin.only(bottom=18),
+        margin=ft.margin(bottom=18),
         padding=20,
         border_radius=24,
         bgcolor="white",
@@ -218,7 +218,7 @@ def card_reserva(reserva):
 
     return ft.Container(
         width=float("inf"),
-        margin=ft.margin.only(bottom=16),
+        margin=ft.margin(bottom=16),
         padding=20,
         border_radius=22,
         bgcolor="white",

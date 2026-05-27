@@ -384,7 +384,7 @@ def tela_aluno(page, usuario, logout):
         conteudo.controls.append(
 
             ft.Container(
-                margin=ft.margin.only(top=10),
+                margin=ft.margin(top=10),
 
                 content=primary_button(
                     "Sair",

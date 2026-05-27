@@ -134,7 +134,7 @@ def tela_cadastro(
                 # =========================
 
                 ft.Container(
-                    margin=ft.margin.only(top=20),
+                    margin=ft.margin(top=20),
 
                     padding=20,
                     border_radius=100,
