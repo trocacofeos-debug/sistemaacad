@@ -18,7 +18,7 @@ def main(page: ft.Page):
     page.scroll = ft.ScrollMode.AUTO
     page.padding = 0
 
-    # RESPONSIVO
+    # MOBILE
     page.window_width = 400
     page.window_height = 850
     page.window_min_width = 320
@@ -35,7 +35,7 @@ def main(page: ft.Page):
     }
 
     # =========================
-    # BODY PRINCIPAL
+    # BODY
     # =========================
 
     body = ft.Column(
@@ -46,18 +46,11 @@ def main(page: ft.Page):
     )
 
     # =========================
-    # CONTAINER CENTRAL
+    # CONTAINER PRINCIPAL
     # =========================
 
     container_principal = ft.Container(
         content=body,
-
-        # RESPONSIVO
-        width=420,
-
-        # IMPORTANTE
-        expand=False,
-
         padding=20,
         border_radius=25,
         bgcolor="white",
@@ -70,33 +63,52 @@ def main(page: ft.Page):
     )
 
     # =========================
-    # LAYOUT CENTRALIZADO
+    # LAYOUT
     # =========================
 
-    page.add(
-        ft.Container(
-            expand=True,
-            padding=15,
-            alignment=ft.Alignment(0, -1),
+    layout = ft.Container(
+        expand=True,
+        bgcolor="#F5F7FB",
+        padding=10,
+        alignment=ft.Alignment(0, -1),
 
-            content=ft.ResponsiveRow(
-                controls=[
-                    ft.Column(
-                        col={
-                            "xs": 12,
-                            "sm": 10,
-                            "md": 8,
-                            "lg": 6,
-                            "xl": 4
-                        },
-                        controls=[
-                            container_principal
-                        ]
-                    )
-                ]
-            )
+        content=ft.Row(
+            alignment=ft.MainAxisAlignment.CENTER,
+            vertical_alignment=ft.CrossAxisAlignment.START,
+
+            controls=[
+
+                ft.Container(
+                    content=container_principal,
+
+                    width=min(
+                        page.window_width * 0.95,
+                        430
+                    ),
+
+                    animate=300,
+                )
+
+            ]
         )
     )
+
+    page.add(layout)
+
+    # =========================
+    # RESPONSIVIDADE
+    # =========================
+
+    def on_resize(e):
+
+        layout.content.controls[0].width = min(
+            page.window_width * 0.95,
+            430
+        )
+
+        page.update()
+
+    page.on_resize = on_resize
 
     # =========================
     # LOGOUT
@@ -154,6 +166,7 @@ def main(page: ft.Page):
 
         body.controls.clear()
 
+        # NÃO LOGADO
         if not usuario["uid"]:
 
             mostrar_login()
