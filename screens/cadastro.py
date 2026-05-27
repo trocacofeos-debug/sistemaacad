@@ -120,9 +120,12 @@ def tela_cadastro(
     # =========================
 
     return ft.Container(
+        expand=True,
+        bgcolor="white",
         padding=20,
 
         content=ft.Column(
+            expand=True,
             scroll=ft.ScrollMode.AUTO,
             spacing=25,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -134,7 +137,7 @@ def tela_cadastro(
                 # =========================
 
                 ft.Container(
-                    margin=(0, 20, 0, 0),
+                    margin=ft.Margin(0, 20, 0, 0),
 
                     padding=20,
                     border_radius=100,
@@ -172,6 +175,7 @@ def tela_cadastro(
 
                 ft.Container(
                     width=float("inf"),
+                    bgcolor="white",
 
                     content=ft.Column(
                         spacing=18,
