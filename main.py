@@ -77,7 +77,7 @@ def main(page: ft.Page):
         ft.Container(
             expand=True,
             padding=15,
-            alignment=ft.alignment.top_center,
+            alignment=ft.Alignment(0, -1),
 
             content=ft.ResponsiveRow(
                 controls=[
