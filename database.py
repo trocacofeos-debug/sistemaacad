@@ -160,7 +160,7 @@ def listar_horarios():
     limpar_horarios_passados()
 
     # garante horários automáticos dos próximos dias
-    gerar_horarios_automaticos(dias=30)
+    gerar_horarios_automaticos(dias=1)
 
     docs = db.collection("horarios").stream()
     horarios = []

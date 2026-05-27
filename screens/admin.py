@@ -574,29 +574,30 @@ def tela_admin(page, usuario, logout):
                                 ),
 
                                 ft.ElevatedButton(
-                                    "Comprar assinatura",
+    "Comprar assinatura",
 
-                                    width=320,
-                                    height=55,
+    width=320,
+    height=55,
 
-                                    style=ft.ButtonStyle(
-                                        bgcolor="#7C3AED",
-                                        color="white",
+    style=ft.ButtonStyle(
+        bgcolor="#7C3AED",
+        color="white",
 
-                                        shape=ft.RoundedRectangleBorder(
-                                            radius=18
-                                        ),
+        shape=ft.RoundedRectangleBorder(
+            radius=18
+        ),
 
-                                        text_style=ft.TextStyle(
-                                            size=18,
-                                            weight=ft.FontWeight.BOLD
-                                        )
-                                    ),
+        text_style=ft.TextStyle(
+            size=18,
+            weight=ft.FontWeight.BOLD
+        )
+    ),
 
-                                    on_click=lambda e: page.launch_url(
-                                        "https://buy.stripe.com/7sY8wPeoV6MQh2r6Zg7Zu00"
-                                    )
-                                )
+    on_click=lambda e: page.launch_url(
+        "https://buy.stripe.com/7sY8wPeoV6MQh2r6Zg7Zu00",
+        web_window_name="_blank"
+    )
+)
                             ]
                         )
                     )
