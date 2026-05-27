@@ -4,62 +4,137 @@ from components.buttons import primary_button, success_button
 
 
 def tela_login(page, usuario, atualizar, mostrar_cadastro):
+
+    # =========================
+    # CAMPOS
+    # =========================
+
     email = ft.TextField(
         label="Email",
-        width=320,
-        border_radius=15,
-        prefix_icon=ft.Icons.EMAIL
+        expand=True,
+        height=60,
+        border_radius=18,
+        prefix_icon=ft.Icons.EMAIL,
+        filled=True,
+        bgcolor="#F8FAFC",
+        border_color="#E2E8F0",
+        text_size=16
     )
 
     senha = ft.TextField(
         label="Senha",
         password=True,
         can_reveal_password=True,
-        width=320,
-        border_radius=15,
-        prefix_icon=ft.Icons.LOCK
+        expand=True,
+        height=60,
+        border_radius=18,
+        prefix_icon=ft.Icons.LOCK,
+        filled=True,
+        bgcolor="#F8FAFC",
+        border_color="#E2E8F0",
+        text_size=16
     )
 
-    mensagem = ft.Text(color="red")
+    mensagem = ft.Text(
+        color="red",
+        size=14,
+        weight=ft.FontWeight.W_500
+    )
+
+    # =========================
+    # LOGIN
+    # =========================
 
     def fazer_login(e):
-        resultado = login(email.value, senha.value)
+
+        resultado = login(
+            email.value,
+            senha.value
+        )
 
         if resultado["sucesso"]:
+
             usuario["uid"] = resultado["usuario"]["uid"]
             usuario["nome"] = resultado["usuario"]["nome"]
             usuario["tipo"] = resultado["usuario"]["tipo"]
+
             atualizar()
+
         else:
+
             mensagem.value = resultado["mensagem"]
+
             page.update()
+
+    # =========================
+    # UI
+    # =========================
 
     return ft.Container(
         expand=True,
+        padding=20,
         content=ft.Column(
+            expand=True,
+            spacing=25,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             alignment=ft.MainAxisAlignment.CENTER,
             controls=[
 
+                # =========================
                 # LOGO
-                ft.Image(
-                    src="logo.png",
-                    width=180,
-                    height=180
+                # =========================
+
+                ft.Container(
+                    margin=ft.margin.only(bottom=10),
+                    content=ft.Image(
+                        src="logo.png",
+                        width=170,
+                        height=170,
+                        fit=ft.ImageFit.CONTAIN
+                    )
                 ),
 
-                email,
-                senha,
-                mensagem,
+                # =========================
+                # TITULO
+                # =========================
 
-                primary_button(
-                    "Entrar",
-                    fazer_login
+                ft.Text(
+                    "Bem-vindo",
+                    size=30,
+                    weight=ft.FontWeight.BOLD,
+                    color="#1E293B"
                 ),
 
-                success_button(
-                    "Criar conta",
-                    mostrar_cadastro
+                ft.Text(
+                    "Entre na sua conta",
+                    size=16,
+                    color="#64748B"
+                ),
+
+                # =========================
+                # FORM
+                # =========================
+
+                ft.Container(
+                    width=420,
+                    content=ft.Column(
+                        spacing=18,
+                        controls=[
+                            email,
+                            senha,
+                            mensagem,
+
+                            primary_button(
+                                "Entrar",
+                                fazer_login
+                            ),
+
+                            success_button(
+                                "Criar conta",
+                                mostrar_cadastro
+                            )
+                        ]
+                    )
                 )
             ]
         )

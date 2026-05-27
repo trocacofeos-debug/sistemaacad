@@ -1,229 +1,455 @@
 import flet as ft
+
 from database import (
     adicionar_horario,
     listar_horarios,
     excluir_horario,
     listar_reservas_completas
 )
+
 from components.cards import card_horario_admin
 from components.buttons import primary_button
 
 
 def tela_admin(page, usuario, logout):
+
     conteudo = ft.Column(
+        expand=True,
         scroll=ft.ScrollMode.AUTO,
-        expand=True
+        spacing=20
     )
 
     aba_atual = "horarios"
 
+    # =========================
+    # EXCLUIR HORÁRIO
+    # =========================
+
     def apagar_horario(horario_id):
+
         excluir_horario(horario_id)
+
         atualizar()
+
+    # =========================
+    # TROCAR ABA
+    # =========================
 
     def trocar_aba(nome):
+
         nonlocal aba_atual
+
         aba_atual = nome
+
         atualizar()
 
+    # =========================
+    # ATUALIZAR
+    # =========================
+
     def atualizar():
+
         try:
+
             conteudo.controls.clear()
 
-            # -------------------------
+            # =========================
             # CAMPOS
-            # -------------------------
+            # =========================
+
             data = ft.TextField(
-                label="Data (ex: 25/12/2025)",
-                width=320
+                label="Data",
+                hint_text="Ex: 25/12/2026",
+                expand=True,
+                border_radius=15,
+                prefix_icon=ft.Icons.CALENDAR_MONTH
             )
 
             hora = ft.TextField(
-                label="Hora (ex: 19:00)",
-                width=320
+                label="Hora",
+                hint_text="Ex: 19:00",
+                expand=True,
+                border_radius=15,
+                prefix_icon=ft.Icons.ACCESS_TIME
             )
 
             vagas = ft.TextField(
                 label="Quantidade de vagas",
-                width=320
+                expand=True,
+                border_radius=15,
+                prefix_icon=ft.Icons.GROUPS
             )
 
             mensagem = ft.Text()
 
+            # =========================
+            # SALVAR HORÁRIO
+            # =========================
+
             def salvar_horario(e):
-                if not data.value or not hora.value or not vagas.value:
+
+                if (
+                    not data.value or
+                    not hora.value or
+                    not vagas.value
+                ):
+
                     mensagem.value = "Preencha todos os campos"
                     mensagem.color = "red"
+
                     page.update()
+
                     return
 
                 try:
+
                     adicionar_horario(
                         data.value,
                         hora.value,
                         int(vagas.value)
                     )
 
-                    mensagem.value = "Horário salvo com sucesso"
+                    mensagem.value = "Horário salvo com sucesso!"
                     mensagem.color = "green"
+
                     atualizar()
 
                 except:
-                    mensagem.value = "Vagas deve ser número"
+
+                    mensagem.value = "Quantidade de vagas inválida"
                     mensagem.color = "red"
+
                     page.update()
 
-            # -------------------------
+            # =========================
             # TOPO
-            # -------------------------
+            # =========================
+
             conteudo.controls.append(
-                ft.Text(
-                    f"Olá, {usuario['nome']} (Admin)",
-                    size=24,
-                    weight=ft.FontWeight.BOLD,
-                    color="#1E88E5"
+
+                ft.Container(
+                    padding=20,
+                    border_radius=25,
+                    bgcolor="white",
+
+                    shadow=ft.BoxShadow(
+                        blur_radius=12,
+                        spread_radius=1,
+                        color="#DDDDDD"
+                    ),
+
+                    content=ft.Column(
+                        spacing=10,
+                        controls=[
+
+                            ft.Text(
+                                f"Olá, {usuario['nome']}",
+                                size=28,
+                                weight="bold",
+                                color="#1E88E5"
+                            ),
+
+                            ft.Text(
+                                "Painel administrativo",
+                                size=16,
+                                color="grey"
+                            )
+                        ]
+                    )
                 )
             )
 
+            # =========================
+            # ABAS
+            # =========================
+
             conteudo.controls.append(
+
                 ft.Row(
-                    [
+                    spacing=10,
+                    controls=[
+
                         ft.ElevatedButton(
                             "Horários",
-                            on_click=lambda e: trocar_aba("horarios")
+                            expand=True,
+                            height=50,
+
+                            bgcolor=(
+                                "#1E88E5"
+                                if aba_atual == "horarios"
+                                else "#EAEAEA"
+                            ),
+
+                            color=(
+                                "white"
+                                if aba_atual == "horarios"
+                                else "black"
+                            ),
+
+                            style=ft.ButtonStyle(
+                                shape=ft.RoundedRectangleBorder(
+                                    radius=15
+                                )
+                            ),
+
+                            on_click=lambda e: trocar_aba(
+                                "horarios"
+                            )
                         ),
+
                         ft.ElevatedButton(
                             "Reservas",
-                            on_click=lambda e: trocar_aba("reservas")
+                            expand=True,
+                            height=50,
+
+                            bgcolor=(
+                                "#43A047"
+                                if aba_atual == "reservas"
+                                else "#EAEAEA"
+                            ),
+
+                            color=(
+                                "white"
+                                if aba_atual == "reservas"
+                                else "black"
+                            ),
+
+                            style=ft.ButtonStyle(
+                                shape=ft.RoundedRectangleBorder(
+                                    radius=15
+                                )
+                            ),
+
+                            on_click=lambda e: trocar_aba(
+                                "reservas"
+                            )
                         )
                     ]
                 )
             )
 
-            conteudo.controls.append(ft.Divider())
-
-            # -------------------------
+            # =========================
             # ABA HORÁRIOS
-            # -------------------------
+            # =========================
+
             if aba_atual == "horarios":
+
                 horarios = listar_horarios()
+
                 lista_horarios = []
 
                 if horarios:
+
                     for h in horarios:
+
                         lista_horarios.append(
+
                             card_horario_admin(
                                 h,
-                                on_delete=lambda e, horario_id=h["id"]: apagar_horario(horario_id)
+                                on_delete=lambda horario_id=h["id"]: apagar_horario(
+                                    horario_id
+                                )
                             )
                         )
+
                 else:
+
                     lista_horarios.append(
-                        ft.Text("Nenhum horário cadastrado")
+
+                        ft.Container(
+                            padding=20,
+                            border_radius=20,
+                            bgcolor="white",
+
+                            content=ft.Text(
+                                "Nenhum horário cadastrado"
+                            )
+                        )
                     )
 
-                conteudo.controls.extend([
-                    ft.Text(
-                        "Adicionar novo horário",
-                        size=20,
-                        weight=ft.FontWeight.BOLD
-                    ),
+                # =========================
+                # FORMULÁRIO
+                # =========================
 
-                    data,
-                    hora,
-                    vagas,
-                    mensagem,
+                conteudo.controls.append(
 
-                    primary_button(
-                        "Salvar horário",
-                        salvar_horario
-                    ),
+                    ft.Container(
+                        padding=20,
+                        border_radius=25,
+                        bgcolor="white",
 
-                    ft.Divider(),
+                        shadow=ft.BoxShadow(
+                            blur_radius=12,
+                            spread_radius=1,
+                            color="#DDDDDD"
+                        ),
+
+                        content=ft.Column(
+                            spacing=20,
+                            controls=[
+
+                                ft.Text(
+                                    "Adicionar Horário",
+                                    size=22,
+                                    weight="bold"
+                                ),
+
+                                data,
+                                hora,
+                                vagas,
+                                mensagem,
+
+                                primary_button(
+                                    "Salvar horário",
+                                    salvar_horario
+                                )
+                            ]
+                        )
+                    )
+                )
+
+                # =========================
+                # LISTA
+                # =========================
+
+                conteudo.controls.append(
 
                     ft.Text(
                         "Horários cadastrados",
-                        size=20,
-                        weight=ft.FontWeight.BOLD
-                    ),
+                        size=22,
+                        weight="bold"
+                    )
+                )
 
-                    *lista_horarios
-                ])
+                conteudo.controls.extend(
+                    lista_horarios
+                )
 
-            # -------------------------
+            # =========================
             # ABA RESERVAS
-            # -------------------------
+            # =========================
+
             elif aba_atual == "reservas":
+
                 reservas = listar_reservas_completas()
+
                 grupos = {}
 
                 for r in reservas:
+
                     chave = f"{r['data']} - {r['hora']}"
 
                     if chave not in grupos:
                         grupos[chave] = []
 
-                    grupos[chave].append(r["aluno_nome"])
+                    grupos[chave].append(
+                        r["aluno_nome"]
+                    )
 
                 conteudo.controls.append(
+
                     ft.Text(
-                        "Reservas dos alunos por horário",
-                        size=20,
-                        weight=ft.FontWeight.BOLD
+                        "Reservas dos alunos",
+                        size=22,
+                        weight="bold"
                     )
                 )
 
                 if grupos:
+
                     for horario, alunos in grupos.items():
 
-                        lista = []
+                        lista_alunos = []
 
                         for nome in alunos:
-                            lista.append(
-                                ft.Text(f"• {nome}")
-                            )
 
-                        conteudo.controls.append(
-                            ft.Card(
-                                content=ft.Container(
-                                    padding=15,
-                                    content=ft.Column(
-                                        [
-                                            ft.Text(
-                                                horario,
-                                                size=18,
-                                                weight=ft.FontWeight.BOLD
-                                            ),
-                                            ft.Divider(),
-                                            *lista
-                                        ]
+                            lista_alunos.append(
+
+                                ft.Container(
+                                    padding=10,
+                                    border_radius=12,
+                                    bgcolor="#F5F7FB",
+
+                                    content=ft.Text(
+                                        f"• {nome}",
+                                        size=15
                                     )
                                 )
                             )
+
+                        conteudo.controls.append(
+
+                            ft.Container(
+                                padding=20,
+                                border_radius=25,
+                                bgcolor="white",
+
+                                shadow=ft.BoxShadow(
+                                    blur_radius=12,
+                                    spread_radius=1,
+                                    color="#DDDDDD"
+                                ),
+
+                                content=ft.Column(
+                                    spacing=15,
+                                    controls=[
+
+                                        ft.Text(
+                                            horario,
+                                            size=18,
+                                            weight="bold",
+                                            color="#1E88E5"
+                                        ),
+
+                                        ft.Divider(),
+
+                                        *lista_alunos
+                                    ]
+                                )
+                            )
                         )
+
                 else:
+
                     conteudo.controls.append(
-                        ft.Text("Nenhuma reserva ainda")
+
+                        ft.Container(
+                            padding=20,
+                            border_radius=20,
+                            bgcolor="white",
+
+                            content=ft.Text(
+                                "Nenhuma reserva encontrada"
+                            )
+                        )
                     )
 
-            conteudo.controls.append(ft.Divider())
+            # =========================
+            # BOTÃO SAIR
+            # =========================
 
             conteudo.controls.append(
-                primary_button(
-                    "Sair",
-                    lambda e: logout()
+
+                ft.Container(
+                    margin=ft.margin.only(top=10),
+
+                    content=primary_button(
+                        "Sair",
+                        lambda e: logout()
+                    )
                 )
             )
 
             page.update()
 
         except Exception as e:
+
             print("ERRO ADMIN:", e)
 
     atualizar()
 
     return ft.Container(
-        content=conteudo,
+        expand=True,
         padding=20,
-        expand=True
+        content=conteudo
     )

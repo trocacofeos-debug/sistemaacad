@@ -10,25 +10,48 @@ from database import (
 
 
 def tela_aluno(page, usuario, logout):
+
     conteudo = ft.Column(
         scroll=ft.ScrollMode.AUTO,
-        expand=True
+        expand=True,
+        spacing=20
     )
 
-    # Guarda o último agendamento
+    # =========================
+    # RESERVA ATUAL
+    # =========================
+
     reserva_existente = buscar_reserva_do_aluno(usuario["uid"])
 
     ultimo_agendamento = {
-    "data": reserva_existente["data"] if reserva_existente else None,
-    "hora": reserva_existente["hora"] if reserva_existente else None
+        "data": reserva_existente["data"] if reserva_existente else None,
+        "hora": reserva_existente["hora"] if reserva_existente else None
     }
-    
+
+    # =========================
+    # MENSAGEM
+    # =========================
+
+    def mostrar_msg(texto, cor="red"):
+        page.snack_bar = ft.SnackBar(
+            content=ft.Text(texto),
+            bgcolor=cor
+        )
+
+        page.snack_bar.open = True
+        page.update()
+
+    # =========================
+    # CANCELAR RESERVA
+    # =========================
+
     def cancelar_reserva(e):
         nonlocal ultimo_agendamento
 
         reserva = buscar_reserva_do_aluno(usuario["uid"])
 
         if reserva:
+
             excluir_reserva(reserva["id"])
 
             ultimo_agendamento = {
@@ -36,22 +59,22 @@ def tela_aluno(page, usuario, logout):
                 "hora": None
             }
 
+            mostrar_msg(
+                "Reserva cancelada!",
+                "red"
+            )
+
             atualizar()
 
-
-    def mostrar_msg(texto, cor="red"):
-        page.snack_bar = ft.SnackBar(
-            content=ft.Text(texto),
-            bgcolor=cor
-        )
-        page.snack_bar.open = True
-        page.update()
+    # =========================
+    # TELA CONFIRMAÇÃO
+    # =========================
 
     def tela_confirmacao(horario):
 
         def confirmar(e):
+
             try:
-                print("BOTÃO CONFIRMAR CLICADO")
 
                 sucesso, msg = reservar_horario(
                     usuario["uid"],
@@ -59,39 +82,40 @@ def tela_aluno(page, usuario, logout):
                     horario["id"]
                 )
 
-                print("RETORNO:", sucesso, msg)
-
-                # Se reservou OU já tinha reservado
                 if sucesso or "já reservou" in msg.lower():
 
-                    # Salva o agendamento para mostrar no painel
                     ultimo_agendamento["data"] = horario["data"]
                     ultimo_agendamento["hora"] = horario["hora"]
 
-                    # Fecha tela de confirmação
                     if len(page.views) > 1:
                         page.views.pop()
 
-                    # Volta para tela principal
                     page.go("/")
 
-                    # Atualiza painel
                     atualizar()
 
-                    # Mensagem
                     if sucesso:
-                        mostrar_msg("Reserva confirmada com sucesso!", "green")
+                        mostrar_msg(
+                            "Reserva confirmada!",
+                            "green"
+                        )
                     else:
-                        mostrar_msg(msg, "orange")
+                        mostrar_msg(
+                            msg,
+                            "orange"
+                        )
 
                 else:
-                    mostrar_msg(msg, "red")
+                    mostrar_msg(msg)
 
             except Exception as erro:
-                print("ERRO:", erro)
-                mostrar_msg(f"Erro: {str(erro)}", "red")
+
+                mostrar_msg(
+                    f"Erro: {str(erro)}"
+                )
 
         def cancelar(e):
+
             if len(page.views) > 1:
                 page.views.pop()
 
@@ -101,61 +125,72 @@ def tela_aluno(page, usuario, logout):
         page.views.append(
             ft.View(
                 route="/confirmar",
+                bgcolor="#F5F7FB",
                 controls=[
+
                     ft.Container(
                         expand=True,
-                        padding=30,
-                        bgcolor="#F5F7FB",
+                        padding=20,
+
                         content=ft.Column(
                             expand=True,
-                            scroll=ft.ScrollMode.AUTO,
+                            spacing=25,
                             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                             alignment=ft.MainAxisAlignment.CENTER,
+
                             controls=[
 
                                 ft.Icon(
                                     ft.Icons.EVENT_AVAILABLE,
-                                    size=90,
+                                    size=80,
                                     color="#1E88E5"
                                 ),
 
                                 ft.Text(
                                     "Confirmar Reserva",
-                                    size=30,
+                                    size=28,
                                     weight="bold",
+                                    text_align="center",
                                     color="#1E88E5"
                                 ),
 
                                 ft.Text(
-                                    "Confira os dados da sua aula",
-                                    size=16,
-                                    color="grey"
+                                    "Confira os dados da aula",
+                                    size=15,
+                                    color="grey",
+                                    text_align="center"
                                 ),
 
                                 ft.Container(
-                                    width=350,
-                                    padding=25,
-                                    border_radius=20,
+                                    width=400,
+                                    border_radius=25,
                                     bgcolor="white",
+                                    padding=25,
+
                                     shadow=ft.BoxShadow(
                                         blur_radius=15,
                                         spread_radius=1,
                                         color="#DDDDDD"
                                     ),
+
                                     content=ft.Column(
+                                        spacing=15,
                                         controls=[
+
                                             ft.Text(
-                                                f"📅 Data: {horario['data']}",
+                                                f"📅 {horario['data']}",
                                                 size=20,
                                                 weight="bold"
                                             ),
+
                                             ft.Text(
-                                                f"⏰ Hora: {horario['hora']}",
-                                                size=20
+                                                f"⏰ {horario['hora']}",
+                                                size=18
                                             ),
+
                                             ft.Text(
-                                                f"👥 Vagas: {horario['vagas']}",
-                                                size=20
+                                                f"👥 {horario['vagas']} vagas",
+                                                size=18
                                             ),
                                         ]
                                     )
@@ -166,13 +201,17 @@ def tela_aluno(page, usuario, logout):
                                     confirmar
                                 ),
 
-                                ft.Container(height=10),
-
-                                ft.ElevatedButton(
+                                ft.OutlinedButton(
                                     "Cancelar",
+                                    width=320,
+                                    height=52,
                                     on_click=cancelar,
-                                    bgcolor="#E53935",
-                                    color="white"
+                                    style=ft.ButtonStyle(
+                                        shape=ft.RoundedRectangleBorder(
+                                            radius=15
+                                        ),
+                                        color="#E53935"
+                                    )
                                 )
                             ]
                         )
@@ -183,93 +222,158 @@ def tela_aluno(page, usuario, logout):
 
         page.update()
 
+    # =========================
+    # ATUALIZAR TELA
+    # =========================
+
     def atualizar():
+
         conteudo.controls.clear()
 
         horarios = listar_horarios()
-        lista = []
+
+        lista_horarios = []
 
         if horarios:
+
             for h in horarios:
-                lista.append(
+
+                lista_horarios.append(
                     card_horario_aluno(
                         h,
                         on_reservar=lambda h=h: tela_confirmacao(h)
                     )
                 )
+
         else:
-            lista.append(
-                ft.Text("Nenhum horário disponível")
+
+            lista_horarios.append(
+
+                ft.Container(
+                    padding=20,
+                    border_radius=20,
+                    bgcolor="white",
+
+                    content=ft.Text(
+                        "Nenhum horário disponível",
+                        text_align="center"
+                    )
+                )
             )
 
-        controles = [
-            ft.Text(
-                f"Olá, {usuario['nome']}",
-                size=24,
-                weight="bold",
-                color="#43A047"
-            ),
-        ]
+        # =========================
+        # TOPO
+        # =========================
 
-        # Painel mostrando último agendamento
+        conteudo.controls.append(
+
+            ft.Column(
+                spacing=5,
+                controls=[
+
+                    ft.Text(
+                        f"Olá, {usuario['nome']}",
+                        size=28,
+                        weight="bold",
+                        color="#43A047"
+                    ),
+
+                    ft.Text(
+                        "Escolha um horário para reservar",
+                        size=16,
+                        color="grey"
+                    )
+                ]
+            )
+        )
+
+        # =========================
+        # CARD AGENDAMENTO
+        # =========================
+
         if ultimo_agendamento["data"]:
-          conteudo.controls.append(
-            ft.Card(
-            content=ft.Container(
-                padding=15,
-                content=ft.Column(
-                    [
-                        ft.Text(
-                            "Seu agendamento",
-                            size=18,
-                            weight=ft.FontWeight.BOLD
-                        ),
 
-                        ft.Text(
-                            f"Data: {ultimo_agendamento['data']}"
-                        ),
+            conteudo.controls.append(
 
-                        ft.Text(
-                            f"Hora: {ultimo_agendamento['hora']}"
-                        ),
+                ft.Container(
+                    border_radius=25,
+                    padding=20,
+                    bgcolor="white",
 
-                        ft.ElevatedButton(
-                            "Cancelar Reserva",
-                            bgcolor="red",
-                            color="white",
-                            on_click=cancelar_reserva
-                        )
-                    ]
+                    shadow=ft.BoxShadow(
+                        blur_radius=12,
+                        spread_radius=1,
+                        color="#DDDDDD"
+                    ),
+
+                    content=ft.Column(
+                        spacing=15,
+                        controls=[
+
+                            ft.Text(
+                                "Seu Agendamento",
+                                size=20,
+                                weight="bold",
+                                color="#1E88E5"
+                            ),
+
+                            ft.Text(
+                                f"📅 {ultimo_agendamento['data']}",
+                                size=17
+                            ),
+
+                            ft.Text(
+                                f"⏰ {ultimo_agendamento['hora']}",
+                                size=17
+                            ),
+
+                            ft.ElevatedButton(
+                                "Cancelar Reserva",
+                                width=220,
+                                height=50,
+                                bgcolor="#E53935",
+                                color="white",
+                                on_click=cancelar_reserva,
+
+                                style=ft.ButtonStyle(
+                                    shape=ft.RoundedRectangleBorder(
+                                        radius=15
+                                    )
+                                )
+                            )
+                        ]
+                    )
+                )
+            )
+
+        # =========================
+        # LISTA HORÁRIOS
+        # =========================
+
+        conteudo.controls.extend(lista_horarios)
+
+        # =========================
+        # SAIR
+        # =========================
+
+        conteudo.controls.append(
+
+            ft.Container(
+                margin=ft.margin.only(top=10),
+
+                content=primary_button(
+                    "Sair",
+                    lambda e: logout()
                 )
             )
         )
-    )
-
-        controles.extend([
-            ft.Text(
-                "Escolha um horário para reservar",
-                size=16,
-                color="grey"
-            ),
-
-            *lista,
-
-            ft.Divider(),
-
-            primary_button(
-                "Sair",
-                lambda e: logout()
-            )
-        ])
-
-        conteudo.controls.extend(controles)
 
         page.update()
 
     atualizar()
 
     return ft.Container(
-        content=conteudo,
+        expand=True,
         padding=20,
-        expand=True
+        content=conteudo
     )

@@ -4,43 +4,85 @@ from components.buttons import primary_button, danger_button
 
 
 def tela_cadastro(page, mostrar_login):
+
+    # =========================
+    # CAMPOS
+    # =========================
+
     nome = ft.TextField(
         label="Nome completo",
-        width=320,
-        border_radius=15,
-        prefix_icon=ft.Icons.PERSON
+        expand=True,
+        height=60,
+        border_radius=18,
+        prefix_icon=ft.Icons.PERSON,
+        filled=True,
+        bgcolor="#F8FAFC",
+        border_color="#E2E8F0",
+        text_size=16
     )
 
     telefone = ft.TextField(
-        label="WhatsApp (ex: 21999999999)",
-        width=320,
-        border_radius=15,
-        prefix_icon=ft.Icons.PHONE
+        label="WhatsApp",
+        hint_text="21999999999",
+        expand=True,
+        height=60,
+        border_radius=18,
+        prefix_icon=ft.Icons.PHONE,
+        filled=True,
+        bgcolor="#F8FAFC",
+        border_color="#E2E8F0",
+        text_size=16
     )
 
     email = ft.TextField(
         label="Email",
-        width=320,
-        border_radius=15,
-        prefix_icon=ft.Icons.EMAIL
+        expand=True,
+        height=60,
+        border_radius=18,
+        prefix_icon=ft.Icons.EMAIL,
+        filled=True,
+        bgcolor="#F8FAFC",
+        border_color="#E2E8F0",
+        text_size=16
     )
 
     senha = ft.TextField(
         label="Senha",
         password=True,
         can_reveal_password=True,
-        width=320,
-        border_radius=15,
-        prefix_icon=ft.Icons.LOCK
+        expand=True,
+        height=60,
+        border_radius=18,
+        prefix_icon=ft.Icons.LOCK,
+        filled=True,
+        bgcolor="#F8FAFC",
+        border_color="#E2E8F0",
+        text_size=16
     )
 
-    mensagem = ft.Text()
+    mensagem = ft.Text(
+        size=14,
+        weight=ft.FontWeight.W_500
+    )
+
+    # =========================
+    # CADASTRAR
+    # =========================
 
     def cadastrar(e):
-        if not nome.value or not telefone.value or not email.value or not senha.value:
+
+        if (
+            not nome.value
+            or not telefone.value
+            or not email.value
+            or not senha.value
+        ):
+
             mensagem.value = "Preencha todos os campos"
             mensagem.color = "red"
+
             page.update()
+
             return
 
         resultado = registrar(
@@ -50,7 +92,9 @@ def tela_cadastro(page, mostrar_login):
             senha.value
         )
 
+        # SUCESSO
         if resultado["sucesso"]:
+
             mensagem.value = "Conta criada com sucesso!"
             mensagem.color = "green"
 
@@ -59,52 +103,88 @@ def tela_cadastro(page, mostrar_login):
             email.value = ""
             senha.value = ""
 
+        # ERRO
         else:
+
             mensagem.value = resultado["mensagem"]
             mensagem.color = "red"
 
         page.update()
 
+    # =========================
+    # UI
+    # =========================
+
     return ft.Container(
+        expand=True,
+        padding=20,
         content=ft.Column(
+            expand=True,
             scroll=ft.ScrollMode.AUTO,
-            horizontal_alignment="center",
+            spacing=25,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.CENTER,
             controls=[
-                ft.Icon(
-                    ft.Icons.PERSON_ADD,
-                    size=80,
-                    color="#43A047"
+
+                # =========================
+                # ÍCONE
+                # =========================
+
+                ft.Container(
+                    padding=20,
+                    border_radius=100,
+                    bgcolor="#DCFCE7",
+                    content=ft.Icon(
+                        ft.Icons.PERSON_ADD,
+                        size=70,
+                        color="#16A34A"
+                    )
                 ),
+
+                # =========================
+                # TITULO
+                # =========================
 
                 ft.Text(
                     "Criar Conta",
-                    size=28,
-                    weight="bold",
-                    color="#43A047"
+                    size=30,
+                    weight=ft.FontWeight.BOLD,
+                    color="#1E293B"
                 ),
 
                 ft.Text(
-                    "Cadastre-se no sistema",
+                    "Cadastre-se para acessar o sistema",
                     size=16,
-                    color="grey"
+                    color="#64748B"
                 ),
 
-                nome,
-                telefone,
-                email,
-                senha,
-                mensagem,
+                # =========================
+                # FORM
+                # =========================
 
-                primary_button(
-                    "Cadastrar",
-                    cadastrar
-                ),
+                ft.Container(
+                    width=420,
+                    content=ft.Column(
+                        spacing=18,
+                        controls=[
+                            nome,
+                            telefone,
+                            email,
+                            senha,
+                            mensagem,
 
-                danger_button(
-                    "Voltar para login",
-                    lambda e: mostrar_login()
-                ),
+                            primary_button(
+                                "Cadastrar",
+                                cadastrar
+                            ),
+
+                            danger_button(
+                                "Voltar para login",
+                                lambda e: mostrar_login()
+                            )
+                        ]
+                    )
+                )
             ]
-        ),
-        padding=20
+        )
     )
