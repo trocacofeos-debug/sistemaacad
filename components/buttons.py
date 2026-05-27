@@ -8,12 +8,13 @@ import flet as ft
 def primary_button(texto, on_click):
 
     return ft.Container(
-        expand=True,
+        width=float("inf"),
         margin=ft.margin.only(top=5, bottom=5),
 
         content=ft.ElevatedButton(
             text=texto,
             on_click=on_click,
+            width=float("inf"),
             height=55,
 
             style=ft.ButtonStyle(
@@ -39,12 +40,13 @@ def primary_button(texto, on_click):
 def success_button(texto, on_click):
 
     return ft.Container(
-        expand=True,
+        width=float("inf"),
         margin=ft.margin.only(top=5, bottom=5),
 
         content=ft.ElevatedButton(
             text=texto,
             on_click=on_click,
+            width=float("inf"),
             height=55,
 
             style=ft.ButtonStyle(
@@ -70,12 +72,13 @@ def success_button(texto, on_click):
 def danger_button(texto, on_click):
 
     return ft.Container(
-        expand=True,
+        width=float("inf"),
         margin=ft.margin.only(top=5, bottom=5),
 
         content=ft.ElevatedButton(
             text=texto,
             on_click=on_click,
+            width=float("inf"),
             height=55,
 
             style=ft.ButtonStyle(

@@ -1,9 +1,16 @@
 import flet as ft
+
 from auth import registrar
-from components.buttons import primary_button, danger_button
+from components.buttons import (
+    primary_button,
+    danger_button
+)
 
 
-def tela_cadastro(page, mostrar_login):
+def tela_cadastro(
+    page,
+    mostrar_login
+):
 
     # =========================
     # CAMPOS
@@ -11,7 +18,6 @@ def tela_cadastro(page, mostrar_login):
 
     nome = ft.TextField(
         label="Nome completo",
-        expand=True,
         height=60,
         border_radius=18,
         prefix_icon=ft.Icons.PERSON,
@@ -24,7 +30,6 @@ def tela_cadastro(page, mostrar_login):
     telefone = ft.TextField(
         label="WhatsApp",
         hint_text="21999999999",
-        expand=True,
         height=60,
         border_radius=18,
         prefix_icon=ft.Icons.PHONE,
@@ -36,7 +41,6 @@ def tela_cadastro(page, mostrar_login):
 
     email = ft.TextField(
         label="Email",
-        expand=True,
         height=60,
         border_radius=18,
         prefix_icon=ft.Icons.EMAIL,
@@ -50,7 +54,6 @@ def tela_cadastro(page, mostrar_login):
         label="Senha",
         password=True,
         can_reveal_password=True,
-        expand=True,
         height=60,
         border_radius=18,
         prefix_icon=ft.Icons.LOCK,
@@ -116,14 +119,14 @@ def tela_cadastro(page, mostrar_login):
     # =========================
 
     return ft.Container(
-        expand=True,
         padding=20,
+
         content=ft.Column(
-            expand=True,
             scroll=ft.ScrollMode.AUTO,
             spacing=25,
+
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            alignment=ft.MainAxisAlignment.CENTER,
+
             controls=[
 
                 # =========================
@@ -131,9 +134,12 @@ def tela_cadastro(page, mostrar_login):
                 # =========================
 
                 ft.Container(
+                    margin=ft.margin.only(top=20),
+
                     padding=20,
                     border_radius=100,
                     bgcolor="#DCFCE7",
+
                     content=ft.Icon(
                         ft.Icons.PERSON_ADD,
                         size=70,
@@ -149,13 +155,15 @@ def tela_cadastro(page, mostrar_login):
                     "Criar Conta",
                     size=30,
                     weight=ft.FontWeight.BOLD,
-                    color="#1E293B"
+                    color="#1E293B",
+                    text_align=ft.TextAlign.CENTER
                 ),
 
                 ft.Text(
                     "Cadastre-se para acessar o sistema",
                     size=16,
-                    color="#64748B"
+                    color="#64748B",
+                    text_align=ft.TextAlign.CENTER
                 ),
 
                 # =========================
@@ -163,14 +171,21 @@ def tela_cadastro(page, mostrar_login):
                 # =========================
 
                 ft.Container(
-                    width=min(page.width * 0.9, 420),
+                    width=420,
+
                     content=ft.Column(
                         spacing=18,
+
                         controls=[
+
                             nome,
+
                             telefone,
+
                             email,
+
                             senha,
+
                             mensagem,
 
                             primary_button(

@@ -9,11 +9,12 @@ from components.buttons import small_button
 def card_horario_admin(horario, on_delete):
 
     return ft.Container(
-        expand=True,
+        width=float("inf"),
         margin=ft.margin.only(bottom=18),
         padding=20,
         border_radius=24,
         bgcolor="white",
+
         shadow=ft.BoxShadow(
             blur_radius=18,
             spread_radius=1,
@@ -27,6 +28,7 @@ def card_horario_admin(horario, on_delete):
                 # DATA
                 ft.Row(
                     controls=[
+
                         ft.Icon(
                             ft.Icons.CALENDAR_MONTH,
                             color="#2563EB",
@@ -46,6 +48,7 @@ def card_horario_admin(horario, on_delete):
                 # HORA
                 ft.Row(
                     controls=[
+
                         ft.Icon(
                             ft.Icons.ACCESS_TIME,
                             color="#64748B",
@@ -68,6 +71,7 @@ def card_horario_admin(horario, on_delete):
 
                     content=ft.Row(
                         controls=[
+
                             ft.Icon(
                                 ft.Icons.GROUPS,
                                 size=20,
@@ -89,6 +93,7 @@ def card_horario_admin(horario, on_delete):
                 ft.Row(
                     alignment=ft.MainAxisAlignment.END,
                     controls=[
+
                         small_button(
                             "Excluir",
                             lambda e: on_delete(horario["id"]),
@@ -108,7 +113,7 @@ def card_horario_admin(horario, on_delete):
 def card_horario_aluno(horario, on_reservar):
 
     return ft.Container(
-        expand=True,
+        width=float("inf"),
         margin=ft.margin.only(bottom=18),
         padding=20,
         border_radius=24,
@@ -127,6 +132,7 @@ def card_horario_aluno(horario, on_reservar):
                 # DATA
                 ft.Row(
                     controls=[
+
                         ft.Icon(
                             ft.Icons.CALENDAR_MONTH,
                             color="#2563EB",
@@ -146,6 +152,7 @@ def card_horario_aluno(horario, on_reservar):
                 # HORA
                 ft.Row(
                     controls=[
+
                         ft.Icon(
                             ft.Icons.ACCESS_TIME,
                             color="#64748B",
@@ -168,6 +175,7 @@ def card_horario_aluno(horario, on_reservar):
 
                     content=ft.Row(
                         controls=[
+
                             ft.Icon(
                                 ft.Icons.GROUPS,
                                 size=20,
@@ -189,6 +197,7 @@ def card_horario_aluno(horario, on_reservar):
                 ft.Row(
                     alignment=ft.MainAxisAlignment.END,
                     controls=[
+
                         small_button(
                             "Reservar",
                             lambda e: on_reservar(horario),
@@ -208,7 +217,7 @@ def card_horario_aluno(horario, on_reservar):
 def card_reserva(reserva):
 
     return ft.Container(
-        expand=True,
+        width=float("inf"),
         margin=ft.margin.only(bottom=16),
         padding=20,
         border_radius=22,
@@ -227,6 +236,7 @@ def card_reserva(reserva):
                 # NOME
                 ft.Row(
                     controls=[
+
                         ft.Icon(
                             ft.Icons.PERSON,
                             color="#2563EB",
@@ -251,6 +261,7 @@ def card_reserva(reserva):
 
                     content=ft.Row(
                         controls=[
+
                             ft.Icon(
                                 ft.Icons.EVENT,
                                 size=18,

@@ -33,6 +33,7 @@ def tela_aluno(page, usuario, logout):
     # =========================
 
     def mostrar_msg(texto, cor="red"):
+
         page.snack_bar = ft.SnackBar(
             content=ft.Text(texto),
             bgcolor=cor
@@ -46,9 +47,12 @@ def tela_aluno(page, usuario, logout):
     # =========================
 
     def cancelar_reserva(e):
+
         nonlocal ultimo_agendamento
 
-        reserva = buscar_reserva_do_aluno(usuario["uid"])
+        reserva = buscar_reserva_do_aluno(
+            usuario["uid"]
+        )
 
         if reserva:
 
@@ -95,17 +99,21 @@ def tela_aluno(page, usuario, logout):
                     atualizar()
 
                     if sucesso:
+
                         mostrar_msg(
                             "Reserva confirmada!",
                             "green"
                         )
+
                     else:
+
                         mostrar_msg(
                             msg,
                             "orange"
                         )
 
                 else:
+
                     mostrar_msg(msg)
 
             except Exception as erro:
@@ -123,9 +131,11 @@ def tela_aluno(page, usuario, logout):
             page.update()
 
         page.views.append(
+
             ft.View(
                 route="/confirmar",
                 bgcolor="#F5F7FB",
+
                 controls=[
 
                     ft.Container(
@@ -161,8 +171,9 @@ def tela_aluno(page, usuario, logout):
                                     text_align="center"
                                 ),
 
+                                # CARD
                                 ft.Container(
-                                    width=min(page.width * 0.9, 400),
+                                    width=400,
                                     border_radius=25,
                                     bgcolor="white",
                                     padding=25,
@@ -175,6 +186,7 @@ def tela_aluno(page, usuario, logout):
 
                                     content=ft.Column(
                                         spacing=15,
+
                                         controls=[
 
                                             ft.Text(
@@ -196,20 +208,24 @@ def tela_aluno(page, usuario, logout):
                                     )
                                 ),
 
+                                # BOTÃO CONFIRMAR
                                 primary_button(
                                     "Confirmar",
                                     confirmar
                                 ),
 
+                                # BOTÃO CANCELAR
                                 ft.OutlinedButton(
                                     "Cancelar",
-                                    width=min(page.width * 0.8, 320),
+                                    width=320,
                                     height=52,
                                     on_click=cancelar,
+
                                     style=ft.ButtonStyle(
                                         shape=ft.RoundedRectangleBorder(
                                             radius=15
                                         ),
+
                                         color="#E53935"
                                     )
                                 )
@@ -234,11 +250,16 @@ def tela_aluno(page, usuario, logout):
 
         lista_horarios = []
 
+        # =========================
+        # LISTA HORÁRIOS
+        # =========================
+
         if horarios:
 
             for h in horarios:
 
                 lista_horarios.append(
+
                     card_horario_aluno(
                         h,
                         on_reservar=lambda h=h: tela_confirmacao(h)
@@ -269,6 +290,7 @@ def tela_aluno(page, usuario, logout):
 
             ft.Column(
                 spacing=5,
+
                 controls=[
 
                     ft.Text(
@@ -308,6 +330,7 @@ def tela_aluno(page, usuario, logout):
 
                     content=ft.Column(
                         spacing=15,
+
                         controls=[
 
                             ft.Text(
@@ -329,7 +352,7 @@ def tela_aluno(page, usuario, logout):
 
                             ft.ElevatedButton(
                                 "Cancelar Reserva",
-                                width=min(page.width * 0.6, 220),
+                                width=220,
                                 height=50,
                                 bgcolor="#E53935",
                                 color="white",
@@ -347,10 +370,12 @@ def tela_aluno(page, usuario, logout):
             )
 
         # =========================
-        # LISTA HORÁRIOS
+        # CARDS HORÁRIOS
         # =========================
 
-        conteudo.controls.extend(lista_horarios)
+        conteudo.controls.extend(
+            lista_horarios
+        )
 
         # =========================
         # SAIR

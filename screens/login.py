@@ -1,9 +1,18 @@
 import flet as ft
+
 from auth import login
-from components.buttons import primary_button, success_button
+from components.buttons import (
+    primary_button,
+    success_button
+)
 
 
-def tela_login(page, usuario, atualizar, mostrar_cadastro):
+def tela_login(
+    page,
+    usuario,
+    atualizar,
+    mostrar_cadastro
+):
 
     # =========================
     # CAMPOS
@@ -11,7 +20,6 @@ def tela_login(page, usuario, atualizar, mostrar_cadastro):
 
     email = ft.TextField(
         label="Email",
-        expand=True,
         height=60,
         border_radius=18,
         prefix_icon=ft.Icons.EMAIL,
@@ -25,7 +33,6 @@ def tela_login(page, usuario, atualizar, mostrar_cadastro):
         label="Senha",
         password=True,
         can_reveal_password=True,
-        expand=True,
         height=60,
         border_radius=18,
         prefix_icon=ft.Icons.LOCK,
@@ -52,6 +59,7 @@ def tela_login(page, usuario, atualizar, mostrar_cadastro):
             senha.value
         )
 
+        # SUCESSO
         if resultado["sucesso"]:
 
             usuario["uid"] = resultado["usuario"]["uid"]
@@ -60,6 +68,7 @@ def tela_login(page, usuario, atualizar, mostrar_cadastro):
 
             atualizar()
 
+        # ERRO
         else:
 
             mensagem.value = resultado["mensagem"]
@@ -71,13 +80,13 @@ def tela_login(page, usuario, atualizar, mostrar_cadastro):
     # =========================
 
     return ft.Container(
-        expand=True,
         padding=20,
+
         content=ft.Column(
-            expand=True,
             spacing=25,
+
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            alignment=ft.MainAxisAlignment.CENTER,
+
             controls=[
 
                 # =========================
@@ -85,7 +94,11 @@ def tela_login(page, usuario, atualizar, mostrar_cadastro):
                 # =========================
 
                 ft.Container(
-                    margin=ft.margin.only(bottom=10),
+                    margin=ft.margin.only(
+                        top=20,
+                        bottom=10
+                    ),
+
                     content=ft.Image(
                         src="logo.png",
                         width=170,
@@ -102,26 +115,33 @@ def tela_login(page, usuario, atualizar, mostrar_cadastro):
                     "Bem-vindo",
                     size=30,
                     weight=ft.FontWeight.BOLD,
-                    color="#1E293B"
+                    color="#1E293B",
+                    text_align=ft.TextAlign.CENTER
                 ),
 
                 ft.Text(
                     "Entre na sua conta",
                     size=16,
-                    color="#64748B"
+                    color="#64748B",
+                    text_align=ft.TextAlign.CENTER
                 ),
 
                 # =========================
-                # FORM
+                # FORMULÁRIO
                 # =========================
 
                 ft.Container(
-                    width=min(page.width * 0.9, 420),
+                    width=420,
+
                     content=ft.Column(
                         spacing=18,
+
                         controls=[
+
                             email,
+
                             senha,
+
                             mensagem,
 
                             primary_button(
