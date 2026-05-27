@@ -9,10 +9,18 @@ from screens.aluno import tela_aluno
 def main(page: ft.Page):
     print("APP INICIOU")
 
+    # =========================
+    # CONFIG PAGE
+    # =========================
+
     page.title = "Espaço Bem-Estar"
     page.theme_mode = ft.ThemeMode.LIGHT
     page.bgcolor = "#F5F7FB"
     page.scroll = ft.ScrollMode.AUTO
+
+    # TAMANHO MOBILE
+    page.window_width = 500
+    page.window_height = 950
 
     usuario = {
         "uid": None,
@@ -20,27 +28,47 @@ def main(page: ft.Page):
         "tipo": None
     }
 
-    # COLUNA PRINCIPAL
+    # =========================
+    # BODY PRINCIPAL
+    # =========================
+
     body = ft.Column(
         expand=True,
-        scroll=ft.ScrollMode.AUTO
+        scroll=ft.ScrollMode.AUTO,
+        spacing=15
     )
 
-    # CONTAINER CENTRALIZADO
+    # =========================
+    # CONTAINER CENTRAL
+    # =========================
+
     container_central = ft.Container(
         content=body,
-        width=420,
-        padding=20,
-        border_radius=20,
-        bgcolor="white"
+        width=550,
+        padding=25,
+        border_radius=25,
+        bgcolor="white",
+        shadow=ft.BoxShadow(
+            blur_radius=20,
+            spread_radius=1,
+            color="#DADADA"
+        )
     )
 
+    # =========================
+    # LAYOUT CENTRALIZADO
+    # =========================
+
     page.add(
-        ft.Row(
-            controls=[
-                container_central
-            ],
-            alignment=ft.MainAxisAlignment.CENTER
+        ft.Container(
+            expand=True,
+            alignment=ft.alignment.center,
+            content=ft.Row(
+                controls=[
+                    container_central
+                ],
+                alignment=ft.MainAxisAlignment.CENTER
+            )
         )
     )
 
@@ -107,6 +135,8 @@ def main(page: ft.Page):
         body.controls.clear()
 
         try:
+
+            # NÃO LOGADO
             if not usuario["uid"]:
                 mostrar_login()
                 return
@@ -138,6 +168,10 @@ def main(page: ft.Page):
         except Exception as e:
             print("ERRO ATUALIZAR:", e)
 
+    # =========================
+    # START LOGIN
+    # =========================
+
     mostrar_login()
 
 
@@ -148,6 +182,7 @@ def main(page: ft.Page):
 ft.app(
     target=main,
     view=ft.AppView.WEB_BROWSER,
+    host="0.0.0.0",
     port=8080,
     assets_dir="assets"
 )
