@@ -155,11 +155,12 @@ def adicionar_horario(data, hora, vagas):
 
 
 def listar_horarios():
+
     # limpa horários antigos
     limpar_horarios_passados()
 
-    # garante horários de hoje
-    gerar_horarios_automaticos(dias=1)
+    # garante horários automáticos dos próximos dias
+    gerar_horarios_automaticos(dias=30)
 
     docs = db.collection("horarios").stream()
     horarios = []
@@ -175,8 +176,9 @@ def listar_horarios():
                 "%d/%m/%Y"
             ).date()
 
-            # SOMENTE horários de hoje
-            if data_obj == hoje:
+            # horários de hoje e próximos dias
+            if data_obj >= hoje:
+
                 horarios.append({
                     "id": doc.id,
                     "data": dados.get("data", "Sem data"),
@@ -187,7 +189,14 @@ def listar_horarios():
         except:
             continue
 
-    horarios.sort(key=lambda x: x["hora"])
+    horarios.sort(
+        key=lambda x: (
+            datetime.strptime(
+                f"{x['data']} {x['hora']}",
+                "%d/%m/%Y %H:%M"
+            )
+        )
+    )
 
     return horarios
 

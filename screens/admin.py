@@ -183,73 +183,113 @@ def tela_admin(page, usuario, logout):
 
             conteudo.controls.append(
 
-                ft.ResponsiveRow(
-                    controls=[
+    ft.ResponsiveRow(
+        controls=[
 
-                        ft.Container(
-                            col={"xs": 12, "sm": 6},
-                            content=ft.ElevatedButton(
-                                "Horários",
-                                width=float("inf"),
-                                height=52,
+            # HORÁRIOS
+            ft.Container(
+                col={"xs": 12, "sm": 4},
 
-                                bgcolor=(
-                                    "#1E88E5"
-                                    if aba_atual == "horarios"
-                                    else "#EAEAEA"
-                                ),
+                content=ft.ElevatedButton(
+                    "Horários",
 
-                                color=(
-                                    "white"
-                                    if aba_atual == "horarios"
-                                    else "black"
-                                ),
+                    width=float("inf"),
+                    height=52,
 
-                                style=ft.ButtonStyle(
-                                    shape=ft.RoundedRectangleBorder(
-                                        radius=15
-                                    )
-                                ),
+                    bgcolor=(
+                        "#1E88E5"
+                        if aba_atual == "horarios"
+                        else "#EAEAEA"
+                    ),
 
-                                on_click=lambda e: trocar_aba(
-                                    "horarios"
-                                )
-                            )
-                        ),
+                    color=(
+                        "white"
+                        if aba_atual == "horarios"
+                        else "black"
+                    ),
 
-                        ft.Container(
-                            col={"xs": 12, "sm": 6},
-                            content=ft.ElevatedButton(
-                                "Reservas",
-                                width=float("inf"),
-                                height=52,
-
-                                bgcolor=(
-                                    "#43A047"
-                                    if aba_atual == "reservas"
-                                    else "#EAEAEA"
-                                ),
-
-                                color=(
-                                    "white"
-                                    if aba_atual == "reservas"
-                                    else "black"
-                                ),
-
-                                style=ft.ButtonStyle(
-                                    shape=ft.RoundedRectangleBorder(
-                                        radius=15
-                                    )
-                                ),
-
-                                on_click=lambda e: trocar_aba(
-                                    "reservas"
-                                )
-                            )
+                    style=ft.ButtonStyle(
+                        shape=ft.RoundedRectangleBorder(
+                            radius=15
                         )
-                    ]
+                    ),
+
+                    on_click=lambda e: trocar_aba(
+                        "horarios"
+                    )
+                )
+            ),
+
+            # RESERVAS
+            ft.Container(
+                col={"xs": 12, "sm": 4},
+
+                content=ft.ElevatedButton(
+                    "Reservas",
+
+                    width=float("inf"),
+                    height=52,
+
+                    bgcolor=(
+                        "#43A047"
+                        if aba_atual == "reservas"
+                        else "#EAEAEA"
+                    ),
+
+                    color=(
+                        "white"
+                        if aba_atual == "reservas"
+                        else "black"
+                    ),
+
+                    style=ft.ButtonStyle(
+                        shape=ft.RoundedRectangleBorder(
+                            radius=15
+                        )
+                    ),
+
+                    on_click=lambda e: trocar_aba(
+                        "reservas"
+                    )
+                )
+            ),
+
+            # ASSINATURA
+            ft.Container(
+                col={"xs": 12, "sm": 4},
+
+                content=ft.ElevatedButton(
+                    "Assinatura",
+
+                    width=float("inf"),
+                    height=52,
+
+                    bgcolor=(
+                        "#7C3AED"
+                        if aba_atual == "assinatura"
+                        else "#EAEAEA"
+                    ),
+
+                    color=(
+                        "white"
+                        if aba_atual == "assinatura"
+                        else "black"
+                    ),
+
+                    style=ft.ButtonStyle(
+                        shape=ft.RoundedRectangleBorder(
+                            radius=15
+                        )
+                    ),
+
+                    on_click=lambda e: trocar_aba(
+                        "assinatura"
+                    )
                 )
             )
+        ]
+    )
+)
 
             # =========================
             # ABA HORÁRIOS
@@ -446,6 +486,121 @@ def tela_admin(page, usuario, logout):
                             )
                         )
                     )
+
+            
+            # =========================
+            # ABA ASSINATURA
+            # =========================
+            
+            elif aba_atual == "assinatura":
+
+                conteudo.controls.append(
+
+                    ft.Container(
+                        padding=25,
+                        border_radius=25,
+                        bgcolor="white",
+
+                        shadow=ft.BoxShadow(
+                            blur_radius=12,
+                            spread_radius=1,
+                            color="#DDDDDD"
+                        ),
+
+                        content=ft.Column(
+                            spacing=20,
+                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+
+                            controls=[
+
+                                ft.Icon(
+                                    ft.Icons.STAR,
+                                    size=70,
+                                    color="#7C3AED"
+                                ),
+
+                                ft.Text(
+                                    "Plano Premium",
+                                    size=28,
+                                    weight="bold",
+                                    color="#7C3AED"
+                                ),
+
+                                ft.Text(
+                                    "Acesse o sistema com facilidade",
+                                    size=16,
+                                    color="grey",
+                                    text_align="center"
+                                ),
+
+                                ft.Container(
+                                    padding=20,
+                                    border_radius=20,
+                                    bgcolor="#F5F3FF",
+
+                                    content=ft.Column(
+                                        spacing=12,
+
+                                        controls=[
+
+                                            ft.Text(
+                                                "✔ Agendamentos ilimitados",
+                                                size=16
+                                            ),
+
+                                            ft.Text(
+                                                "✔ Painel administrativo",
+                                                size=16
+                                            ),
+
+                                            ft.Text(
+                                                "✔ WhatsApp automático",
+                                                size=16
+                                            ),
+
+                                            ft.Text(
+                                                "✔ Suporte prioritário",
+                                                size=16
+                                            ),
+                                        ]
+                                    )
+                                ),
+
+                                ft.Text(
+                                    "R$ 49,90/mês",
+                                    size=34,
+                                    weight="bold",
+                                    color="#16A34A"
+                                ),
+
+                                ft.ElevatedButton(
+                                    "Comprar assinatura",
+
+                                    width=320,
+                                    height=55,
+
+                                    style=ft.ButtonStyle(
+                                        bgcolor="#7C3AED",
+                                        color="white",
+
+                                        shape=ft.RoundedRectangleBorder(
+                                            radius=18
+                                        ),
+
+                                        text_style=ft.TextStyle(
+                                            size=18,
+                                            weight=ft.FontWeight.BOLD
+                                        )
+                                    ),
+
+                                    on_click=lambda e: page.launch_url(
+                                        "https://buy.stripe.com/7sY8wPeoV6MQh2r6Zg7Zu00"
+                                    )
+                                )
+                            ]
+                        )
+                    )
+                )        
 
             # =========================
             # BOTÃO SAIR
