@@ -22,12 +22,29 @@ def main(page: ft.Page):
         "tipo": None
     }
 
-    body = ft.Column(
+    body = ft.Container(
+    content=ft.Column(
         expand=True,
         scroll=ft.ScrollMode.AUTO
+    ),
+    alignment=ft.alignment.center,
+    expand=True
     )
 
-    page.add(body)
+    page.add(
+    ft.Row(
+        [
+            ft.Container(
+                content=body,
+                width=420,
+                padding=20,
+                border_radius=20,
+                bgcolor="white"
+            )
+        ],
+        alignment=ft.MainAxisAlignment.CENTER
+    )
+)
 
     # =========================
     # LOGOUT
