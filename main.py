@@ -1,4 +1,3 @@
-import os
 import flet as ft
 
 from screens.login import tela_login
@@ -10,9 +9,9 @@ from screens.aluno import tela_aluno
 def main(page: ft.Page):
     print("APP INICIOU")
 
-    # =========================
-    # CONFIG PAGE
-    # =========================
+    # =====================================
+    # PAGE
+    # =====================================
 
     page.title = "Espaço Bem-Estar"
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -20,9 +19,9 @@ def main(page: ft.Page):
     page.scroll = ft.ScrollMode.AUTO
     page.padding = 0
 
-    # RESPONSIVO
-    page.window_width = 400
-    page.window_height = 800
+    # =====================================
+    # USUÁRIO
+    # =====================================
 
     usuario = {
         "uid": None,
@@ -30,9 +29,9 @@ def main(page: ft.Page):
         "tipo": None
     }
 
-    # =========================
-    # BODY
-    # =========================
+    # =====================================
+    # BODY PRINCIPAL
+    # =====================================
 
     body = ft.Column(
         expand=True,
@@ -40,76 +39,49 @@ def main(page: ft.Page):
         spacing=20
     )
 
-    # =========================
+    # =====================================
     # CONTAINER RESPONSIVO
-    # =========================
+    # =====================================
 
-    container_central = ft.Container(
+    container_app = ft.Container(
         content=body,
+        width=500,
         expand=True,
         padding=20,
-        border_radius=0,
-        bgcolor="white"
+        border_radius=25,
+        bgcolor="white",
     )
 
-    # =========================
-    # LAYOUT
-    # =========================
+    # =====================================
+    # CENTRALIZAÇÃO
+    # =====================================
 
-    layout = ft.Container(
-        expand=True,
-        bgcolor="#F5F7FB",
-        content=ft.Row(
-            [
-                ft.Container(
-                    content=container_central,
-                    expand=True,
-                    alignment=ft.Alignment(0, 0)
-                )
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            expand=True
+    page.add(
+        ft.Container(
+            expand=True,
+            padding=10,
+            alignment=ft.alignment.top_center,
+            content=ft.ResponsiveRow(
+                controls=[
+                    ft.Column(
+                        col={
+                            "xs": 12,
+                            "sm": 10,
+                            "md": 8,
+                            "lg": 6,
+                        },
+                        controls=[
+                            container_app
+                        ]
+                    )
+                ]
+            )
         )
     )
 
-    page.add(layout)
-
-    # =========================
-    # RESPONSIVIDADE
-    # =========================
-
-    def on_resize(e):
-
-        largura = page.window_width
-
-        # CELULAR
-        if largura <= 600:
-
-            container_central.width = largura
-            container_central.border_radius = 0
-            container_central.padding = 15
-
-        # TABLET
-        elif largura <= 900:
-
-            container_central.width = 700
-            container_central.border_radius = 20
-            container_central.padding = 25
-
-        # DESKTOP
-        else:
-
-            container_central.width = 500
-            container_central.border_radius = 25
-            container_central.padding = 30
-
-        page.update()
-
-    page.on_resized = on_resize
-
-    # =========================
+    # =====================================
     # LOGOUT
-    # =========================
+    # =====================================
 
     def logout():
         usuario["uid"] = None
@@ -118,16 +90,16 @@ def main(page: ft.Page):
 
         mostrar_login()
 
-    # =========================
+    # =====================================
     # LOGIN
-    # =========================
+    # =====================================
 
     def mostrar_login():
+        print("CARREGANDO LOGIN")
 
         body.controls.clear()
 
         try:
-
             body.controls.append(
                 tela_login(
                     page=page,
@@ -142,16 +114,14 @@ def main(page: ft.Page):
         except Exception as e:
             print("ERRO LOGIN:", e)
 
-    # =========================
+    # =====================================
     # CADASTRO
-    # =========================
+    # =====================================
 
     def mostrar_cadastro():
-
         body.controls.clear()
 
         try:
-
             body.controls.append(
                 tela_cadastro(
                     page=page,
@@ -164,16 +134,14 @@ def main(page: ft.Page):
         except Exception as e:
             print("ERRO CADASTRO:", e)
 
-    # =========================
+    # =====================================
     # ATUALIZAR
-    # =========================
+    # =====================================
 
     def atualizar():
-
         body.controls.clear()
 
         try:
-
             # NÃO LOGADO
             if not usuario["uid"]:
                 mostrar_login()
@@ -206,23 +174,21 @@ def main(page: ft.Page):
         except Exception as e:
             print("ERRO ATUALIZAR:", e)
 
-    # =========================
+    # =====================================
     # START
-    # =========================
-
-    on_resize(None)
+    # =====================================
 
     mostrar_login()
 
 
-# =========================
+# =====================================
 # APP
-# =========================
+# =====================================
 
 ft.app(
     target=main,
     view=ft.AppView.WEB_BROWSER,
     host="0.0.0.0",
-    port=int(os.environ.get("PORT", 8080)),
+    port=8080,
     assets_dir="assets"
 )
