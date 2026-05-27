@@ -163,7 +163,7 @@ def tela_cadastro(page, mostrar_login):
                 # =========================
 
                 ft.Container(
-                    width=420,
+                    width=min(page.width * 0.9, 420),
                     content=ft.Column(
                         spacing=18,
                         controls=[

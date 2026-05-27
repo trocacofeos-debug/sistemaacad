@@ -162,7 +162,7 @@ def tela_aluno(page, usuario, logout):
                                 ),
 
                                 ft.Container(
-                                    width=400,
+                                    width=min(page.width * 0.9, 400),
                                     border_radius=25,
                                     bgcolor="white",
                                     padding=25,
@@ -203,7 +203,7 @@ def tela_aluno(page, usuario, logout):
 
                                 ft.OutlinedButton(
                                     "Cancelar",
-                                    width=320,
+                                    width=min(page.width * 0.8, 320),
                                     height=52,
                                     on_click=cancelar,
                                     style=ft.ButtonStyle(
@@ -329,7 +329,7 @@ def tela_aluno(page, usuario, logout):
 
                             ft.ElevatedButton(
                                 "Cancelar Reserva",
-                                width=220,
+                                width=min(page.width * 0.6, 220),
                                 height=50,
                                 bgcolor="#E53935",
                                 color="white",

@@ -37,7 +37,8 @@ def card_horario_admin(horario, on_delete):
                             horario["data"],
                             size=20,
                             weight=ft.FontWeight.BOLD,
-                            color="#1E293B"
+                            color="#1E293B",
+                            expand=True
                         )
                     ]
                 ),
@@ -64,6 +65,7 @@ def card_horario_admin(horario, on_delete):
                     padding=10,
                     border_radius=14,
                     bgcolor="#EFF6FF",
+
                     content=ft.Row(
                         controls=[
                             ft.Icon(
@@ -76,7 +78,8 @@ def card_horario_admin(horario, on_delete):
                                 f"{horario['vagas']} vagas disponíveis",
                                 size=14,
                                 weight=ft.FontWeight.W_500,
-                                color="#2563EB"
+                                color="#2563EB",
+                                expand=True
                             )
                         ]
                     )
@@ -110,6 +113,7 @@ def card_horario_aluno(horario, on_reservar):
         padding=20,
         border_radius=24,
         bgcolor="white",
+
         shadow=ft.BoxShadow(
             blur_radius=18,
             spread_radius=1,
@@ -133,7 +137,8 @@ def card_horario_aluno(horario, on_reservar):
                             horario["data"],
                             size=20,
                             weight=ft.FontWeight.BOLD,
-                            color="#1E293B"
+                            color="#1E293B",
+                            expand=True
                         )
                     ]
                 ),
@@ -160,6 +165,7 @@ def card_horario_aluno(horario, on_reservar):
                     padding=10,
                     border_radius=14,
                     bgcolor="#ECFDF5",
+
                     content=ft.Row(
                         controls=[
                             ft.Icon(
@@ -172,7 +178,8 @@ def card_horario_aluno(horario, on_reservar):
                                 f"{horario['vagas']} vagas disponíveis",
                                 size=14,
                                 weight=ft.FontWeight.W_500,
-                                color="#16A34A"
+                                color="#16A34A",
+                                expand=True
                             )
                         ]
                     )
@@ -206,6 +213,7 @@ def card_reserva(reserva):
         padding=20,
         border_radius=22,
         bgcolor="white",
+
         shadow=ft.BoxShadow(
             blur_radius=14,
             spread_radius=1,
@@ -229,16 +237,18 @@ def card_reserva(reserva):
                             reserva["aluno_nome"],
                             size=18,
                             weight=ft.FontWeight.BOLD,
-                            color="#1E293B"
+                            color="#1E293B",
+                            expand=True
                         )
                     ]
                 ),
 
-                # HORARIO
+                # HORÁRIO
                 ft.Container(
                     padding=10,
                     border_radius=14,
                     bgcolor="#F8FAFC",
+
                     content=ft.Row(
                         controls=[
                             ft.Icon(
@@ -250,7 +260,8 @@ def card_reserva(reserva):
                             ft.Text(
                                 f"ID Horário: {reserva['horario_id']}",
                                 size=14,
-                                color="#475569"
+                                color="#475569",
+                                expand=True
                             )
                         ]
                     )

@@ -61,26 +61,44 @@ def tela_admin(page, usuario, logout):
                 label="Data",
                 hint_text="Ex: 25/12/2026",
                 expand=True,
-                border_radius=15,
-                prefix_icon=ft.Icons.CALENDAR_MONTH
+                height=60,
+                border_radius=18,
+                prefix_icon=ft.Icons.CALENDAR_MONTH,
+                filled=True,
+                bgcolor="#F8FAFC",
+                border_color="#E2E8F0",
+                text_size=16
             )
 
             hora = ft.TextField(
                 label="Hora",
                 hint_text="Ex: 19:00",
                 expand=True,
-                border_radius=15,
-                prefix_icon=ft.Icons.ACCESS_TIME
+                height=60,
+                border_radius=18,
+                prefix_icon=ft.Icons.ACCESS_TIME,
+                filled=True,
+                bgcolor="#F8FAFC",
+                border_color="#E2E8F0",
+                text_size=16
             )
 
             vagas = ft.TextField(
                 label="Quantidade de vagas",
                 expand=True,
-                border_radius=15,
-                prefix_icon=ft.Icons.GROUPS
+                height=60,
+                border_radius=18,
+                prefix_icon=ft.Icons.GROUPS,
+                filled=True,
+                bgcolor="#F8FAFC",
+                border_color="#E2E8F0",
+                text_size=16
             )
 
-            mensagem = ft.Text()
+            mensagem = ft.Text(
+                size=14,
+                weight=ft.FontWeight.W_500
+            )
 
             # =========================
             # SALVAR HORÁRIO
@@ -165,63 +183,68 @@ def tela_admin(page, usuario, logout):
 
             conteudo.controls.append(
 
-                ft.Row(
-                    spacing=10,
+                ft.ResponsiveRow(
                     controls=[
 
-                        ft.ElevatedButton(
-                            "Horários",
-                            expand=True,
-                            height=50,
+                        ft.Container(
+                            col={"xs": 12, "sm": 6},
+                            content=ft.ElevatedButton(
+                                "Horários",
+                                width=float("inf"),
+                                height=52,
 
-                            bgcolor=(
-                                "#1E88E5"
-                                if aba_atual == "horarios"
-                                else "#EAEAEA"
-                            ),
+                                bgcolor=(
+                                    "#1E88E5"
+                                    if aba_atual == "horarios"
+                                    else "#EAEAEA"
+                                ),
 
-                            color=(
-                                "white"
-                                if aba_atual == "horarios"
-                                else "black"
-                            ),
+                                color=(
+                                    "white"
+                                    if aba_atual == "horarios"
+                                    else "black"
+                                ),
 
-                            style=ft.ButtonStyle(
-                                shape=ft.RoundedRectangleBorder(
-                                    radius=15
+                                style=ft.ButtonStyle(
+                                    shape=ft.RoundedRectangleBorder(
+                                        radius=15
+                                    )
+                                ),
+
+                                on_click=lambda e: trocar_aba(
+                                    "horarios"
                                 )
-                            ),
-
-                            on_click=lambda e: trocar_aba(
-                                "horarios"
                             )
                         ),
 
-                        ft.ElevatedButton(
-                            "Reservas",
-                            expand=True,
-                            height=50,
+                        ft.Container(
+                            col={"xs": 12, "sm": 6},
+                            content=ft.ElevatedButton(
+                                "Reservas",
+                                width=float("inf"),
+                                height=52,
 
-                            bgcolor=(
-                                "#43A047"
-                                if aba_atual == "reservas"
-                                else "#EAEAEA"
-                            ),
+                                bgcolor=(
+                                    "#43A047"
+                                    if aba_atual == "reservas"
+                                    else "#EAEAEA"
+                                ),
 
-                            color=(
-                                "white"
-                                if aba_atual == "reservas"
-                                else "black"
-                            ),
+                                color=(
+                                    "white"
+                                    if aba_atual == "reservas"
+                                    else "black"
+                                ),
 
-                            style=ft.ButtonStyle(
-                                shape=ft.RoundedRectangleBorder(
-                                    radius=15
+                                style=ft.ButtonStyle(
+                                    shape=ft.RoundedRectangleBorder(
+                                        radius=15
+                                    )
+                                ),
+
+                                on_click=lambda e: trocar_aba(
+                                    "reservas"
                                 )
-                            ),
-
-                            on_click=lambda e: trocar_aba(
-                                "reservas"
                             )
                         )
                     ]

@@ -116,7 +116,7 @@ def tela_login(page, usuario, atualizar, mostrar_cadastro):
                 # =========================
 
                 ft.Container(
-                    width=420,
+                    width=min(page.width * 0.9, 420),
                     content=ft.Column(
                         spacing=18,
                         controls=[

@@ -7,11 +7,10 @@ from screens.aluno import tela_aluno
 
 
 def main(page: ft.Page):
-    print("APP INICIOU")
 
-    # =====================================
-    # PAGE
-    # =====================================
+    # =========================
+    # CONFIG PAGE
+    # =========================
 
     page.title = "Espaço Bem-Estar"
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -19,9 +18,15 @@ def main(page: ft.Page):
     page.scroll = ft.ScrollMode.AUTO
     page.padding = 0
 
-    # =====================================
-    # USUÁRIO
-    # =====================================
+    # RESPONSIVO
+    page.window_width = 400
+    page.window_height = 850
+    page.window_min_width = 320
+    page.window_min_height = 600
+
+    # =========================
+    # USUARIO
+    # =========================
 
     usuario = {
         "uid": None,
@@ -29,38 +34,51 @@ def main(page: ft.Page):
         "tipo": None
     }
 
-    # =====================================
+    # =========================
     # BODY PRINCIPAL
-    # =====================================
+    # =========================
 
     body = ft.Column(
         expand=True,
+        spacing=20,
         scroll=ft.ScrollMode.AUTO,
-        spacing=20
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
     )
 
-    # =====================================
-    # CONTAINER RESPONSIVO
-    # =====================================
+    # =========================
+    # CONTAINER CENTRAL
+    # =========================
 
-    container_app = ft.Container(
+    container_principal = ft.Container(
         content=body,
-        width=500,
-        expand=True,
+
+        # RESPONSIVO
+        width=420,
+
+        # IMPORTANTE
+        expand=False,
+
         padding=20,
         border_radius=25,
         bgcolor="white",
+
+        shadow=ft.BoxShadow(
+            blur_radius=20,
+            spread_radius=1,
+            color="#DDDDDD"
+        )
     )
 
-    # =====================================
-    # CENTRALIZAÇÃO
-    # =====================================
+    # =========================
+    # LAYOUT CENTRALIZADO
+    # =========================
 
     page.add(
         ft.Container(
             expand=True,
-            padding=10,
+            padding=15,
             alignment=ft.alignment.top_center,
+
             content=ft.ResponsiveRow(
                 controls=[
                     ft.Column(
@@ -69,9 +87,10 @@ def main(page: ft.Page):
                             "sm": 10,
                             "md": 8,
                             "lg": 6,
+                            "xl": 4
                         },
                         controls=[
-                            container_app
+                            container_principal
                         ]
                     )
                 ]
@@ -79,111 +98,101 @@ def main(page: ft.Page):
         )
     )
 
-    # =====================================
+    # =========================
     # LOGOUT
-    # =====================================
+    # =========================
 
     def logout():
+
         usuario["uid"] = None
         usuario["nome"] = None
         usuario["tipo"] = None
 
         mostrar_login()
 
-    # =====================================
+    # =========================
     # LOGIN
-    # =====================================
+    # =========================
 
     def mostrar_login():
-        print("CARREGANDO LOGIN")
 
         body.controls.clear()
 
-        try:
-            body.controls.append(
-                tela_login(
-                    page=page,
-                    usuario=usuario,
-                    atualizar=atualizar,
-                    mostrar_cadastro=mostrar_cadastro
-                )
+        body.controls.append(
+            tela_login(
+                page=page,
+                usuario=usuario,
+                atualizar=atualizar,
+                mostrar_cadastro=mostrar_cadastro
             )
+        )
 
-            page.update()
+        page.update()
 
-        except Exception as e:
-            print("ERRO LOGIN:", e)
-
-    # =====================================
+    # =========================
     # CADASTRO
-    # =====================================
+    # =========================
 
     def mostrar_cadastro():
+
         body.controls.clear()
 
-        try:
+        body.controls.append(
+            tela_cadastro(
+                page=page,
+                mostrar_login=mostrar_login
+            )
+        )
+
+        page.update()
+
+    # =========================
+    # ATUALIZAR
+    # =========================
+
+    def atualizar():
+
+        body.controls.clear()
+
+        if not usuario["uid"]:
+
+            mostrar_login()
+            return
+
+        # ADMIN
+        if usuario["tipo"] == "admin":
+
             body.controls.append(
-                tela_cadastro(
+                tela_admin(
                     page=page,
-                    mostrar_login=mostrar_login
+                    usuario=usuario,
+                    logout=logout
                 )
             )
 
-            page.update()
+        # ALUNO
+        else:
 
-        except Exception as e:
-            print("ERRO CADASTRO:", e)
-
-    # =====================================
-    # ATUALIZAR
-    # =====================================
-
-    def atualizar():
-        body.controls.clear()
-
-        try:
-            # NÃO LOGADO
-            if not usuario["uid"]:
-                mostrar_login()
-                return
-
-            # ADMIN
-            if usuario["tipo"] == "admin":
-
-                body.controls.append(
-                    tela_admin(
-                        page=page,
-                        usuario=usuario,
-                        logout=logout
-                    )
+            body.controls.append(
+                tela_aluno(
+                    page=page,
+                    usuario=usuario,
+                    logout=logout
                 )
+            )
 
-            # ALUNO
-            else:
+        page.update()
 
-                body.controls.append(
-                    tela_aluno(
-                        page=page,
-                        usuario=usuario,
-                        logout=logout
-                    )
-                )
-
-            page.update()
-
-        except Exception as e:
-            print("ERRO ATUALIZAR:", e)
-
-    # =====================================
+    # =========================
     # START
-    # =====================================
+    # =========================
 
     mostrar_login()
 
 
-# =====================================
+# =========================
 # APP
-# =====================================
+# =========================
 
 ft.app(
     target=main,
