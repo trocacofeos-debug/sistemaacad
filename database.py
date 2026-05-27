@@ -61,7 +61,8 @@ def listar_usuarios():
 # HORÁRIOS AUTOMÁTICOS
 # =========================
 
-def gerar_horarios_automaticos(dias=30):
+def gerar_horarios_automaticos(dias=1):
+
     horarios_fixos = [
         "06:00",
         "07:00",
@@ -77,22 +78,31 @@ def gerar_horarios_automaticos(dias=30):
     ]
 
     docs = db.collection("horarios").stream()
+
     existentes = set()
 
     for doc in docs:
+
         dados = doc.to_dict()
+
         chave = f"{dados.get('data')}_{dados.get('hora')}"
+
         existentes.add(chave)
 
     hoje = datetime.now()
 
     for i in range(dias):
-        data = (hoje + timedelta(days=i)).strftime("%d/%m/%Y")
+
+        data = (
+            hoje + timedelta(days=i)
+        ).strftime("%d/%m/%Y")
 
         for hora in horarios_fixos:
+
             chave = f"{data}_{hora}"
 
             if chave not in existentes:
+
                 db.collection("horarios").add({
                     "data": data,
                     "hora": hora,
@@ -101,36 +111,41 @@ def gerar_horarios_automaticos(dias=30):
 
 
 def limpar_horarios_passados():
+
     docs = db.collection("horarios").stream()
+
     hoje = datetime.now().date()
 
     for doc in docs:
+
         dados = doc.to_dict()
+
         data_str = dados.get("data")
 
         if not data_str:
             continue
 
         try:
+
             data_horario = datetime.strptime(
                 data_str,
                 "%d/%m/%Y"
             ).date()
 
             if data_horario < hoje:
+
                 horario_id = doc.id
 
-                # apagar reservas desse horário
                 reservas = db.collection("reservas") \
                     .where("horario_id", "==", horario_id) \
                     .stream()
 
                 for reserva in reservas:
+
                     db.collection("reservas") \
                         .document(reserva.id) \
                         .delete()
 
-                # apagar horário
                 db.collection("horarios") \
                     .document(horario_id) \
                     .delete()
@@ -138,11 +153,43 @@ def limpar_horarios_passados():
         except:
             continue
 
+
+def limpar_horarios_futuros():
+
+    hoje = datetime.now().date()
+
+    docs = db.collection("horarios").stream()
+
+    for doc in docs:
+
+        dados = doc.to_dict()
+
+        data_str = dados.get("data")
+
+        try:
+
+            data_obj = datetime.strptime(
+                data_str,
+                "%d/%m/%Y"
+            ).date()
+
+            # remove tudo depois de hoje
+            if data_obj > hoje:
+
+                db.collection("horarios") \
+                    .document(doc.id) \
+                    .delete()
+
+        except:
+            continue
+
+
 # =========================
 # HORÁRIOS
 # =========================
 
 def criar_horario(data, hora, vagas):
+
     db.collection("horarios").add({
         "data": data,
         "hora": hora,
@@ -159,25 +206,33 @@ def listar_horarios():
     # limpa horários antigos
     limpar_horarios_passados()
 
-    # garante horários automáticos dos próximos dias
+    # remove horários futuros
+    limpar_horarios_futuros()
+
+    # gera apenas horários de hoje
     gerar_horarios_automaticos(dias=1)
 
     docs = db.collection("horarios").stream()
+
     horarios = []
+
     hoje = datetime.now().date()
 
     for doc in docs:
+
         dados = doc.to_dict()
+
         data_str = dados.get("data")
 
         try:
+
             data_obj = datetime.strptime(
                 data_str,
                 "%d/%m/%Y"
             ).date()
 
-            # horários de hoje e próximos dias
-            if data_obj >= hoje:
+            # somente horários de hoje
+            if data_obj == hoje:
 
                 horarios.append({
                     "id": doc.id,
@@ -202,18 +257,27 @@ def listar_horarios():
 
 
 def buscar_horario_por_id(horario_id):
-    doc = db.collection("horarios").document(horario_id).get()
+
+    doc = db.collection("horarios") \
+        .document(horario_id) \
+        .get()
 
     if doc.exists:
+
         dados = doc.to_dict()
+
         dados["id"] = doc.id
+
         return dados
 
     return None
 
 
 def excluir_horario(horario_id):
-    db.collection("horarios").document(horario_id).delete()
+
+    db.collection("horarios") \
+        .document(horario_id) \
+        .delete()
 
 
 def deletar_horario(horario_id):
@@ -225,17 +289,24 @@ def deletar_horario(horario_id):
 # =========================
 
 def criar_reserva(aluno_uid, aluno_nome, horario_id):
+
     try:
+
         print("INICIO RESERVA")
 
-        horario_ref = db.collection("horarios").document(horario_id)
+        horario_ref = db.collection("horarios") \
+            .document(horario_id)
+
         horario_doc = horario_ref.get()
 
         if not horario_doc.exists:
+
             print("HORÁRIO NÃO EXISTE")
+
             return False, "Horário não encontrado"
 
         horario = horario_doc.to_dict()
+
         vagas = int(horario.get("vagas", 0))
 
         print("VAGAS:", vagas)
@@ -244,17 +315,31 @@ def criar_reserva(aluno_uid, aluno_nome, horario_id):
             return False, "Sem vagas disponíveis"
 
         reservas = db.collection("reservas") \
-            .where(filter=FieldFilter("aluno_uid", "==", aluno_uid)) \
-            .where(filter=FieldFilter("horario_id", "==", horario_id)) \
+            .where(
+                filter=FieldFilter(
+                    "aluno_uid",
+                    "==",
+                    aluno_uid
+                )
+            ) \
+            .where(
+                filter=FieldFilter(
+                    "horario_id",
+                    "==",
+                    horario_id
+                )
+            ) \
             .stream()
 
         for _ in reservas:
             return False, "Você já reservou este horário"
 
         data_str = horario.get("data")
+
         hora_str = horario.get("hora")
 
         try:
+
             data_hora = datetime.strptime(
                 f"{data_str} {hora_str}",
                 "%d/%m/%Y %H:%M"
@@ -263,6 +348,7 @@ def criar_reserva(aluno_uid, aluno_nome, horario_id):
             aviso_em = data_hora - timedelta(minutes=30)
 
         except:
+
             aviso_em = None
 
         dados_reserva = {
@@ -279,7 +365,6 @@ def criar_reserva(aluno_uid, aluno_nome, horario_id):
 
         db.collection("reservas").add(dados_reserva)
 
-        # diminui vaga
         novas_vagas = max(0, vagas - 1)
 
         horario_ref.update({
@@ -287,12 +372,15 @@ def criar_reserva(aluno_uid, aluno_nome, horario_id):
         })
 
         print("NOVAS VAGAS:", novas_vagas)
+
         print("RESERVA OK")
 
         return True, "Reserva realizada com sucesso"
 
     except Exception as e:
+
         print("ERRO FIREBASE:", e)
+
         return False, str(e)
 
 
@@ -303,12 +391,15 @@ def adicionar_reserva(aluno_uid, aluno_nome, horario_id):
 def reservar_horario(aluno_uid, aluno_nome, horario_id):
     return criar_reserva(aluno_uid, aluno_nome, horario_id)
 
+
 def buscar_reserva_do_aluno(aluno_uid):
+
     docs = db.collection("reservas") \
         .where("aluno_uid", "==", aluno_uid) \
         .stream()
 
     for doc in docs:
+
         dados = doc.to_dict()
 
         return {
@@ -324,14 +415,13 @@ def buscar_reserva_do_aluno(aluno_uid):
 
 
 def listar_reservas():
+
     docs = db.collection("reservas").stream()
 
-
-def listar_reservas():
-    docs = db.collection("reservas").stream()
     reservas = []
 
     for doc in docs:
+
         dados = doc.to_dict()
 
         reservas.append({
@@ -341,13 +431,17 @@ def listar_reservas():
             "horario_id": dados.get("horario_id", None),
             "data": dados.get("data", ""),
             "hora": dados.get("hora", ""),
-            "whatsapp_enviado": dados.get("whatsapp_enviado", False)
+            "whatsapp_enviado": dados.get(
+                "whatsapp_enviado",
+                False
+            )
         })
 
     return reservas
 
 
 def listar_reservas_pendentes_whatsapp():
+
     agora = datetime.now()
 
     docs = db.collection("reservas") \
@@ -357,39 +451,54 @@ def listar_reservas_pendentes_whatsapp():
     pendentes = []
 
     for doc in docs:
+
         dados = doc.to_dict()
 
         aviso_em = dados.get("aviso_em")
 
         if aviso_em and aviso_em <= agora:
+
             dados["id"] = doc.id
+
             pendentes.append(dados)
 
     return pendentes
 
 
 def marcar_whatsapp_enviado(reserva_id):
-    db.collection("reservas").document(reserva_id).update({
-        "whatsapp_enviado": True
-    })
+
+    db.collection("reservas") \
+        .document(reserva_id) \
+        .update({
+            "whatsapp_enviado": True
+        })
 
 
 def excluir_reserva(reserva_id):
-    reserva_ref = db.collection("reservas").document(reserva_id)
+
+    reserva_ref = db.collection("reservas") \
+        .document(reserva_id)
+
     reserva_doc = reserva_ref.get()
 
     if not reserva_doc.exists:
         return False
 
     reserva = reserva_doc.to_dict()
+
     horario_id = reserva.get("horario_id")
 
     if horario_id:
-        horario_ref = db.collection("horarios").document(horario_id)
+
+        horario_ref = db.collection("horarios") \
+            .document(horario_id)
+
         horario_doc = horario_ref.get()
 
         if horario_doc.exists:
+
             horario = horario_doc.to_dict()
+
             vagas = horario.get("vagas", 0)
 
             horario_ref.update({
@@ -404,6 +513,7 @@ def excluir_reserva(reserva_id):
 def deletar_reserva(reserva_id):
     return excluir_reserva(reserva_id)
 
+
 # =========================
 # RELATÓRIOS / DASHBOARD
 # =========================
@@ -414,6 +524,7 @@ def total_usuarios():
 
 
 def total_alunos():
+
     docs = db.collection("usuarios") \
         .where("tipo", "==", "aluno") \
         .stream()
@@ -422,6 +533,7 @@ def total_alunos():
 
 
 def total_admins():
+
     docs = db.collection("usuarios") \
         .where("tipo", "==", "admin") \
         .stream()
@@ -440,6 +552,7 @@ def total_reservas():
 
 
 def reservas_do_dia():
+
     hoje = datetime.now().strftime("%d/%m/%Y")
 
     docs = db.collection("reservas") \
@@ -449,42 +562,56 @@ def reservas_do_dia():
     reservas = []
 
     for doc in docs:
+
         dados = doc.to_dict()
+
         dados["id"] = doc.id
+
         reservas.append(dados)
 
     return reservas
 
 
 def horarios_com_vagas():
+
     docs = db.collection("horarios").stream()
+
     horarios = []
 
     for doc in docs:
+
         dados = doc.to_dict()
 
         if dados.get("vagas", 0) > 0:
+
             dados["id"] = doc.id
+
             horarios.append(dados)
 
     return horarios
 
 
 def horarios_lotados():
+
     docs = db.collection("horarios").stream()
+
     horarios = []
 
     for doc in docs:
+
         dados = doc.to_dict()
 
         if dados.get("vagas", 0) <= 0:
+
             dados["id"] = doc.id
+
             horarios.append(dados)
 
     return horarios
 
 
 def dashboard():
+
     return {
         "total_usuarios": total_usuarios(),
         "total_alunos": total_alunos(),
@@ -496,12 +623,15 @@ def dashboard():
         "horarios_lotados": len(horarios_lotados())
     }
 
+
 def listar_reservas_completas():
+
     reservas = []
 
     docs = db.collection("reservas").stream()
 
     for doc in docs:
+
         dados = doc.to_dict()
 
         reservas.append({

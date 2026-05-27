@@ -1,4 +1,5 @@
 import flet as ft
+import webbrowser
 
 from database import (
     adicionar_horario,
@@ -573,7 +574,7 @@ def tela_admin(page, usuario, logout):
                                     color="#16A34A"
                                 ),
 
-                                ft.ElevatedButton(
+    ft.ElevatedButton(
     "Comprar assinatura",
 
     width=320,
@@ -593,9 +594,8 @@ def tela_admin(page, usuario, logout):
         )
     ),
 
-    on_click=lambda e: page.launch_url(
-        "https://buy.stripe.com/7sY8wPeoV6MQh2r6Zg7Zu00",
-        web_window_name="_blank"
+    on_click=lambda e: webbrowser.open(
+        "https://buy.stripe.com/7sY8wPeoV6MQh2r6Zg7Zu00"
     )
 )
                             ]
