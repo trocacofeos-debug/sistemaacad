@@ -13,6 +13,9 @@ def main(page: ft.Page):
     # =========================
 
     page.title = "Espaço Bem-Estar"
+
+    page.favicon = "favicon.png"
+
     page.theme_mode = ft.ThemeMode.LIGHT
     page.bgcolor = "#F5F7FB"
     page.scroll = ft.ScrollMode.AUTO
@@ -207,4 +210,10 @@ def main(page: ft.Page):
 # APP
 # =========================
 
-ft.app(target=main,)
+ft.app(
+    target=main,
+    view=ft.AppView.WEB_BROWSER,
+    host="0.0.0.0",
+    port=8080,
+    assets_dir="assets"
+)
