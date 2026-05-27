@@ -20,9 +20,9 @@ def main(page: ft.Page):
     page.scroll = ft.ScrollMode.AUTO
     page.padding = 0
 
-    # =========================
-    # USUÁRIO
-    # =========================
+    # RESPONSIVO
+    page.window_width = 400
+    page.window_height = 800
 
     usuario = {
         "uid": None,
@@ -36,43 +36,76 @@ def main(page: ft.Page):
 
     body = ft.Column(
         expand=True,
-        scroll=ft.ScrollMode.AUTO
+        scroll=ft.ScrollMode.AUTO,
+        spacing=20
     )
 
     # =========================
-    # CONTAINER CENTRAL
+    # CONTAINER RESPONSIVO
     # =========================
 
     container_central = ft.Container(
         content=body,
-        width=500,
-        padding=25,
-        border_radius=25,
-        bgcolor="white",
-        shadow=ft.BoxShadow(
-            blur_radius=20,
-            spread_radius=1,
-            color="#DDDDDD"
-        )
+        expand=True,
+        padding=20,
+        border_radius=0,
+        bgcolor="white"
     )
 
     # =========================
-    # LAYOUT CENTRALIZADO
+    # LAYOUT
     # =========================
 
-    page.add(
-        ft.Container(
-            expand=True,
-            alignment=ft.Alignment(0, 0),
-            padding=20,
-            content=ft.Row(
-                controls=[
-                    container_central
-                ],
-                alignment=ft.MainAxisAlignment.CENTER
-            )
+    layout = ft.Container(
+        expand=True,
+        bgcolor="#F5F7FB",
+        content=ft.Row(
+            [
+                ft.Container(
+                    content=container_central,
+                    expand=True,
+                    alignment=ft.Alignment(0, 0)
+                )
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            expand=True
         )
     )
+
+    page.add(layout)
+
+    # =========================
+    # RESPONSIVIDADE
+    # =========================
+
+    def on_resize(e):
+
+        largura = page.window_width
+
+        # CELULAR
+        if largura <= 600:
+
+            container_central.width = largura
+            container_central.border_radius = 0
+            container_central.padding = 15
+
+        # TABLET
+        elif largura <= 900:
+
+            container_central.width = 700
+            container_central.border_radius = 20
+            container_central.padding = 25
+
+        # DESKTOP
+        else:
+
+            container_central.width = 500
+            container_central.border_radius = 25
+            container_central.padding = 30
+
+        page.update()
+
+    page.on_resized = on_resize
 
     # =========================
     # LOGOUT
@@ -90,11 +123,11 @@ def main(page: ft.Page):
     # =========================
 
     def mostrar_login():
-        print("CARREGANDO LOGIN")
 
         body.controls.clear()
 
         try:
+
             body.controls.append(
                 tela_login(
                     page=page,
@@ -114,9 +147,11 @@ def main(page: ft.Page):
     # =========================
 
     def mostrar_cadastro():
+
         body.controls.clear()
 
         try:
+
             body.controls.append(
                 tela_cadastro(
                     page=page,
@@ -134,6 +169,7 @@ def main(page: ft.Page):
     # =========================
 
     def atualizar():
+
         body.controls.clear()
 
         try:
@@ -173,6 +209,8 @@ def main(page: ft.Page):
     # =========================
     # START
     # =========================
+
+    on_resize(None)
 
     mostrar_login()
 
