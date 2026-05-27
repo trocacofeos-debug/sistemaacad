@@ -13,8 +13,6 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
     page.bgcolor = "#F5F7FB"
     page.scroll = ft.ScrollMode.AUTO
-    page.window_width = 400
-    page.window_height = 800
 
     usuario = {
         "uid": None,
@@ -22,29 +20,29 @@ def main(page: ft.Page):
         "tipo": None
     }
 
-    body = ft.Container(
-    content=ft.Column(
+    # COLUNA PRINCIPAL
+    body = ft.Column(
         expand=True,
         scroll=ft.ScrollMode.AUTO
-    ),
-    alignment=ft.alignment.center,
-    expand=True
+    )
+
+    # CONTAINER CENTRALIZADO
+    container_central = ft.Container(
+        content=body,
+        width=420,
+        padding=20,
+        border_radius=20,
+        bgcolor="white"
     )
 
     page.add(
-    ft.Row(
-        [
-            ft.Container(
-                content=body,
-                width=420,
-                padding=20,
-                border_radius=20,
-                bgcolor="white"
-            )
-        ],
-        alignment=ft.MainAxisAlignment.CENTER
+        ft.Row(
+            controls=[
+                container_central
+            ],
+            alignment=ft.MainAxisAlignment.CENTER
+        )
     )
-)
 
     # =========================
     # LOGOUT
@@ -150,5 +148,6 @@ def main(page: ft.Page):
 ft.app(
     target=main,
     view=ft.AppView.WEB_BROWSER,
-    port=8080
+    port=8080,
+    assets_dir="assets"
 )
