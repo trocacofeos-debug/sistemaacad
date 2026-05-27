@@ -9,10 +9,16 @@ def primary_button(texto, on_click):
 
     return ft.Container(
         width=float("inf"),
-        margin=ft.Margin(0, 5, 0, 5),
+        margin=5,
 
         content=ft.ElevatedButton(
-            texto,
+            content=ft.Text(
+                texto,
+                size=16,
+                weight=ft.FontWeight.BOLD,
+                color="white"
+            ),
+
             on_click=on_click,
             width=float("inf"),
             height=55,
@@ -20,13 +26,6 @@ def primary_button(texto, on_click):
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=18),
                 bgcolor="#2563EB",
-                color="white",
-
-                text_style=ft.TextStyle(
-                    size=16,
-                    weight=ft.FontWeight.BOLD
-                ),
-
                 elevation=3
             )
         )
@@ -41,10 +40,16 @@ def success_button(texto, on_click):
 
     return ft.Container(
         width=float("inf"),
-        margin=ft.Margin(0, 5, 0, 5),
+        margin=5,
 
         content=ft.ElevatedButton(
-            texto,
+            content=ft.Text(
+                texto,
+                size=16,
+                weight=ft.FontWeight.BOLD,
+                color="white"
+            ),
+
             on_click=on_click,
             width=float("inf"),
             height=55,
@@ -52,13 +57,6 @@ def success_button(texto, on_click):
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=18),
                 bgcolor="#16A34A",
-                color="white",
-
-                text_style=ft.TextStyle(
-                    size=16,
-                    weight=ft.FontWeight.BOLD
-                ),
-
                 elevation=3
             )
         )
@@ -73,10 +71,16 @@ def danger_button(texto, on_click):
 
     return ft.Container(
         width=float("inf"),
-        margin=ft.Margin(0, 5, 0, 5),
+        margin=5,
 
         content=ft.ElevatedButton(
-            texto,
+            content=ft.Text(
+                texto,
+                size=16,
+                weight=ft.FontWeight.BOLD,
+                color="white"
+            ),
+
             on_click=on_click,
             width=float("inf"),
             height=55,
@@ -84,13 +88,6 @@ def danger_button(texto, on_click):
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=18),
                 bgcolor="#DC2626",
-                color="white",
-
-                text_style=ft.TextStyle(
-                    size=16,
-                    weight=ft.FontWeight.BOLD
-                ),
-
                 elevation=3
             )
         )
@@ -104,18 +101,18 @@ def danger_button(texto, on_click):
 def small_button(texto, on_click, color="#2563EB"):
 
     return ft.ElevatedButton(
-        texto,
+        content=ft.Text(
+            texto,
+            size=14,
+            weight=ft.FontWeight.W_600,
+            color="white"
+        ),
+
         on_click=on_click,
         height=42,
 
         style=ft.ButtonStyle(
             shape=ft.RoundedRectangleBorder(radius=14),
-            bgcolor=color,
-            color="white",
-
-            text_style=ft.TextStyle(
-                size=14,
-                weight=ft.FontWeight.W_600
-            )
+            bgcolor=color
         )
     )

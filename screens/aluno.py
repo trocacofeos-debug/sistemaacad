@@ -1,6 +1,8 @@
 import flet as ft
+
 from components.cards import card_horario_aluno
 from components.buttons import primary_button
+
 from database import (
     listar_horarios,
     reservar_horario,
@@ -21,7 +23,9 @@ def tela_aluno(page, usuario, logout):
     # RESERVA ATUAL
     # =========================
 
-    reserva_existente = buscar_reserva_do_aluno(usuario["uid"])
+    reserva_existente = buscar_reserva_do_aluno(
+        usuario["uid"]
+    )
 
     ultimo_agendamento = {
         "data": reserva_existente["data"] if reserva_existente else None,
@@ -383,12 +387,24 @@ def tela_aluno(page, usuario, logout):
 
         conteudo.controls.append(
 
-            ft.Container(
-                margin=ft.margin(top=10),
+            ft.ElevatedButton(
+                "Sair",
+                on_click=lambda e: logout(),
+                width=float("inf"),
+                height=55,
 
-                content=primary_button(
-                    "Sair",
-                    lambda e: logout()
+                style=ft.ButtonStyle(
+                    shape=ft.RoundedRectangleBorder(
+                        radius=18
+                    ),
+
+                    bgcolor="#FD0000",
+                    color="white",
+
+                    text_style=ft.TextStyle(
+                        size=16,
+                        weight=ft.FontWeight.BOLD
+                    )
                 )
             )
         )

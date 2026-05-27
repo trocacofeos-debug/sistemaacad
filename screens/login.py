@@ -103,8 +103,7 @@ def tela_login(
                     content=ft.Image(
                         src="logo.png",
                         width=170,
-                        height=170,
-                        fit="contain"
+                        height=170
                     )
                 ),
 

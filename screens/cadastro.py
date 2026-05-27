@@ -1,6 +1,7 @@
 import flet as ft
 
 from auth import registrar
+
 from components.buttons import (
     primary_button,
     danger_button
@@ -124,7 +125,6 @@ def tela_cadastro(
         content=ft.Column(
             scroll=ft.ScrollMode.AUTO,
             spacing=25,
-
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
 
             controls=[
@@ -134,7 +134,7 @@ def tela_cadastro(
                 # =========================
 
                 ft.Container(
-                    margin=ft.margin(top=20),
+                    margin=(0, 20, 0, 0),
 
                     padding=20,
                     border_radius=100,
@@ -171,7 +171,7 @@ def tela_cadastro(
                 # =========================
 
                 ft.Container(
-                    width=420,
+                    width=float("inf"),
 
                     content=ft.Column(
                         spacing=18,
